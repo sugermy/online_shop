@@ -43,7 +43,6 @@
   </div>
 </template>
 <script>
-import QRCode from 'qrcodejs2' //引入二维码插件
 import SwiperTicket from '@/components/SwiperTicket.vue'
 export default {
 	components: {
