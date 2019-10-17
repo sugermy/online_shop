@@ -32,7 +32,6 @@ export default {
 		justify-content: center;
 		align-items: center;
 		.tab-icon {
-			width: 20px;
 			height: 20px;
 		}
 		.tab-name {

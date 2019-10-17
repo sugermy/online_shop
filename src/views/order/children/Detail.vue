@@ -54,7 +54,7 @@ export default {
 			activeNames: [],
 			tabs: ['已使用', '待使用'],
 			userlist: [{}, {}],
-			nouselist: [{}, {}]
+			nouselist: [{}, {},{},{},{}]
 		}
 	},
 	methods: {}
