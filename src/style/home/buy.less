@@ -1,0 +1,337 @@
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.buy {
+  .buy-part {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    padding: 14px;
+    &:first-child {
+      margin-top: 8px;
+    }
+    .part-title {
+      font-size: 16px;
+      font-family: PingFangSC-Medium, PingFangSC;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+    }
+    .part-main {
+      width: 100%;
+    }
+  }
+  .part-date {
+    .part-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      .part-date-item {
+        width: 22%;
+        border: 1px solid #333333;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 5px 0;
+      }
+      .pick-date {
+        border-color: #ff9921;
+        color: #ff9921;
+        position: relative;
+        .pick-icon {
+          position: absolute;
+          bottom: -1px;
+          right: -1px;
+          width: 20px;
+          height: 20px;
+          background: url("../../assets/pick_date.png") no-repeat;
+          background-size: 100%;
+        }
+      }
+    }
+  }
+  .part-info {
+    .part-main {
+      display: flex;
+      margin-top: 14px;
+      .part-img {
+        width: 120px;
+        height: 86px;
+        margin-right: 10px;
+      }
+      .part-info {
+        width: 100%;
+        .part-name {
+          font-weight: 600;
+          color: #333333;
+          line-height: 20px;
+        }
+        .part-detail {
+          font-size: 12px;
+          font-weight: 400;
+          color: rgba(153, 153, 153, 1);
+          margin: 8px 0;
+        }
+        .part-action {
+          display: flex;
+          height: 30px;
+          justify-content: space-between;
+          align-items: center;
+          .part-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(254, 53, 74, 1);
+          }
+        }
+      }
+      .has-img {
+        width: calc(100% - 130px);
+      }
+    }
+    .part-rules {
+      height: 30px;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 249, 241, 1);
+      border-radius: 4px;
+      font-size: 10px;
+      color: rgba(173, 141, 118, 1);
+      padding: 0 8px;
+      .part-rules-list {
+        display: flex;
+        align-items: center;
+        .rules-icon {
+          width: 10px;
+          height: 10px;
+          background: url("../../assets/rules_info.png") no-repeat;
+          background-size: 100%;
+          margin-right: 4px;
+        }
+        .rules-line {
+          margin: 0 4px;
+        }
+      }
+      .part-rules-enter {
+        height: 100%;
+        line-height: 30px;
+      }
+    }
+  }
+  .part-tourist {
+    .tourist-action {
+      height: 34px;
+      line-height: 34px;
+      display: flex;
+      font-size: 13px;
+      justify-content: space-between;
+      margin-top: 14px;
+      color: #333333;
+      .tourist-list {
+        width: calc(100% - 88px);
+        white-space: nowrap;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        display: flex;
+        align-items: center;
+        .tourist-item {
+          flex: 1;
+          box-sizing: border-box;
+          height: 34px;
+          padding: 0 10px;
+          border-radius: 2px;
+          border: 1px solid #333333;
+          margin-right: 4px;
+          position: relative;
+          .tourist-icon {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 20px;
+            height: 20px;
+            background: url("../../assets/pick_date.png") no-repeat;
+            background-size: 100%;
+          }
+        }
+        .checked-item {
+          border-color: #ff9921;
+          color: #ff9921;
+        }
+      }
+      .tourist-modify {
+        width: 80px;
+        text-align: center;
+        border-radius: 2px;
+        border: 1px solid #333333;
+        margin-left: 8px;
+      }
+    }
+    .check-tourist {
+      margin-top: 14px;
+      .check-item {
+        min-height: 52px;
+        position: relative;
+        border-top: 1px solid #e3e3e3;
+        padding: 10px 0;
+        &:last-child {
+          padding-bottom: 0;
+        }
+        .check-edit {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 40px;
+          height: 40px;
+          background: url("../../assets/per_edit.png") no-repeat center;
+          background-size: 50%;
+        }
+        .i-name {
+          font-size: 13px;
+          font-weight: 500;
+          color: rgba(51, 51, 51, 1);
+        }
+        .i-card {
+          margin: 8px 0;
+        }
+        .i-txt {
+          font-size: 12px;
+          font-weight: 400;
+          color: rgba(102, 102, 102, 1);
+        }
+      }
+    }
+  }
+  .buy-pay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 49px;
+    background: #fff;
+    .pay-total {
+      margin-left: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+      .pay-price {
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(254, 53, 74, 1);
+      }
+    }
+    .pay-action {
+      width: 125px;
+      height: 49px;
+      line-height: 49px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      letter-spacing: 1px;
+      background: rgba(255, 153, 33, 1);
+    }
+  }
+}
+.show-per {
+  height: 60vh;
+  border-radius: 10px 10px 0 0;
+  padding: 0 14px 14px;
+  box-sizing: border-box;
+  .per-header {
+    height: 50px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .per-btn {
+      height: 100%;
+      line-height: 50px;
+    }
+    .choose {
+      font-weight: 600;
+      color: rgba(255, 153, 33, 1);
+    }
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(51, 51, 51, 1);
+    }
+  }
+  .per-main {
+    height: calc(100% - 50px);
+    .main-top {
+      height: 43px;
+      width: 60%;
+      margin: 0 auto;
+      border-radius: 23px;
+      border: 1px solid rgba(255, 153, 33, 1);
+      font-size: 17px;
+      font-weight: 600;
+      color: #ff9921;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .per-icon {
+        width: 10px;
+        height: 10px;
+        background: url("../../assets/add_tour.png") no-repeat center;
+        background-size: 100%;
+        margin-right: 8px;
+      }
+    }
+    .main-content {
+      height: calc(100% - 45px);
+      overflow-y: auto;
+      .per-item {
+        height: 50px;
+        padding: 14px 0;
+        border-bottom: 1px solid #e3e3e3;
+        display: flex;
+        align-items: center;
+        .per-info {
+          width: 80%;
+          height: 100%;
+          margin-left: 10px;
+          .i-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+          }
+          .i-card {
+            margin: 8px 0;
+          }
+          .i-txt {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(102, 102, 102, 1);
+          }
+        }
+        .per-edit {
+          flex: 1;
+          width: 40px;
+          height: 40px;
+          background: url("../../assets/per_edit.png") no-repeat center;
+          background-size: 50%;
+        }
+      }
+    }
+  }
+}
+.edit-per {
+  height: 40vh !important;
+  .van-cell {
+    padding: 15px 16px;
+  }
+}

@@ -1,0 +1,265 @@
+.home {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    .user-name {
+      font-size: 22px;
+      font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+      font-weight: 600;
+      color: rgba(255, 153, 33, 1);
+      span {
+        font-weight: 600;
+        color: #444;
+      }
+    }
+    .user-photo {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .pro-type {
+    width: 100%;
+    margin-top: 6px;
+    .pro-itema {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      .pro-img {
+        width: 120px;
+        height: 86px;
+        margin-left: 10px;
+      }
+      .pro-info {
+        margin-left: 8px;
+        font-size: 15px;
+        width: calc(100% - 138px);
+        .pro-name {
+          font-weight: 500;
+          color: rgba(51, 51, 51, 1);
+        }
+        .pro-detail {
+          font-size: 12px;
+          color: rgba(153, 153, 153, 1);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin: 5px 0;
+        }
+        .pro-year {
+          font-size: 10px;
+          font-weight: 400;
+          color: rgba(175, 175, 175, 1);
+          display: flex;
+          align-items: center;
+          .year-d {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .year-icon {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: url("../../assets/year_info.png") no-repeat;
+            background-size: 100%;
+            margin-right: 2px;
+          }
+        }
+        .pro-buy {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 5px;
+          .pro-price {
+            font-size: 16px;
+            font-family: Roboto-Medium, Roboto;
+            font-weight: 600;
+            color: rgba(254, 53, 74, 1);
+          }
+          .pro-go {
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 15px;
+            margin-right: 10px;
+            color: #ff6834;
+            text-align: center;
+            border: 1px solid rgba(255, 104, 52, 1);
+          }
+        }
+      }
+    }
+    .pro-itemb {
+      box-sizing: border-box;
+      width: 100%;
+      height: 76px;
+      display: flex;
+      padding: 0 14px;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #e3e3e3;
+      &:first-child {
+        border-radius: 8px 8px 0 0;
+      }
+      &:last-child {
+        border-radius: 0 0 8px 8px;
+        border-bottom: none;
+      }
+      .pro-info {
+        .pro-name {
+          font-size: 15px;
+          font-weight: 600;
+          color: rgba(51, 51, 51, 1);
+        }
+        .pro-detail {
+          font-size: 12px;
+          font-weight: 400;
+          color: rgba(153, 153, 153, 1);
+          margin-top: 10px;
+        }
+      }
+      .pro-buy {
+        width: 55%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .pro-price {
+          font-size: 16px;
+          font-family: Roboto-Medium, Roboto;
+          font-weight: 600;
+          color: rgba(254, 53, 74, 1);
+        }
+        .pro-go {
+          width: 80px;
+          height: 30px;
+          line-height: 30px;
+          border-radius: 15px;
+          color: #ff6834;
+          text-align: center;
+          border: 1px solid rgba(255, 104, 52, 1);
+        }
+      }
+    }
+  }
+  .needs {
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 0 14px;
+    .needs-header {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      border-bottom: 1px solid #e3e3e3;
+      .needs-icon {
+        width: 18px;
+        height: 19px;
+        background: url("../../assets/needs.png") no-repeat;
+        background-size: 100%;
+      }
+    }
+    .remark-list {
+      margin-top: 14px;
+      .remark-item {
+        padding-bottom: 14px;
+        &:last-child {
+          margin-bottom: 14px;
+        }
+        .remark-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255, 153, 33, 1);
+          line-height: 20px;
+          margin-bottom: 4px;
+        }
+        .remark-info {
+          font-size: 13px;
+          color: rgba(153, 153, 153, 1);
+          line-height: 24px;
+          white-space: pre-line;
+        }
+      }
+    }
+  }
+
+  .prop-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    border-bottom: 1px solid #e3e3e3;
+    .prop-icon {
+      width: 18px;
+      height: 19px;
+      background: url("../../assets/needs.png") no-repeat;
+      background-size: 100%;
+    }
+  }
+  .prop-main {
+    padding: 14px;
+    .prop-name {
+      font-weight: 500;
+      color: #333333;
+    }
+    .prop-detail {
+      font-size: 12px;
+      line-height: 20px;
+      color: rgba(153, 153, 153, 1);
+      margin: 5px 0;
+      max-height: 160px;
+      white-space: pre-line;
+      overflow-y: auto;
+    }
+    .prop-year {
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(175, 175, 175, 1);
+      display: flex;
+      align-items: center;
+      .year-d {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .year-icon {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background: url("../../assets/year_info.png") no-repeat;
+        background-size: 100%;
+        margin-right: 2px;
+      }
+    }
+    .prop-price {
+      margin-top: 10px;
+      font-size: 16px;
+      font-family: Roboto-Medium, Roboto;
+      font-weight: 600;
+      color: rgba(254, 53, 74, 1);
+    }
+    .prop-go {
+      width: 200px;
+      height: 42px;
+      line-height: 42px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      background: rgba(255, 102, 50, 1);
+      border-radius: 6px;
+      margin: 20px auto 0;
+    }
+  }
+}

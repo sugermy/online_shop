@@ -1,0 +1,108 @@
+.mine {
+  padding: 0 !important;
+}
+/deep/.van-tab {
+  width: 20%;
+}
+.product-con {
+  padding: 0 14px;
+  box-sizing: border-box;
+  margin-top: 10px;
+  height: calc(100vh - 104px);
+  padding-bottom: 14px;
+  overflow-y: auto;
+  .product-item {
+    background: #fff;
+    box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.11);
+    border-radius: 4px;
+    margin-bottom: 14px;
+    padding: 10px 10px 6px;
+    position: relative;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .pro-orderno {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 153, 33, 1);
+      line-height: 18px;
+    }
+    .pro-info {
+      display: flex;
+      .pro-tourist {
+        width: 58px;
+        height: 58px;
+        margin-right: 5%;
+      }
+      .pro-detail {
+        height: 100%;
+        .pro-detail-username {
+          font-size: 15px;
+          font-weight: 600;
+          color: rgba(51, 51, 51, 1);
+          line-height: 21px;
+        }
+        .pro-detail-proname {
+          font-size: 13px;
+          color: rgba(102, 102, 102, 1);
+          line-height: 18px;
+          margin: 2px 0 4px;
+        }
+        .pro-detail-num {
+          .num {
+            font-size: 13px;
+            font-weight: 400;
+            color: rgba(102, 102, 102, 1);
+            line-height: 18px;
+          }
+          .price {
+            font-size: 14px;
+            font-weight: bold;
+            color: rgba(254, 53, 74, 1);
+            line-height: 20px;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+    .pro-footer {
+      height: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .date {
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(136, 136, 136, 1);
+      }
+      .status {
+        font-size: 14px;
+        color: #999999;
+        margin-right: 0.4rem;
+      }
+      .to-pay {
+        width: 60px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        border-radius: 13px;
+        color: #ff8a00;
+        border: 1px solid rgba(255, 153, 33, 1);
+      }
+      .to-refound {
+        width: 60px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        border-radius: 13px;
+        border: 1px solid #979797;
+      }
+    }
+    .status-img {
+      position: absolute;
+      right: 8px;
+      top: 1.5%;
+      width: 24%;
+    }
+  }
+}
