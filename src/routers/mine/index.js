@@ -2,6 +2,8 @@
 
 const Mine = () => import('../../views/mine/index.vue');
 const View = () => import('../../views/mine/children/View.vue');
+const Detail = () => import('../../views/mine/children/Detail.vue');
+const Create = () => import('../../views/mine/children/Create.vue');
 
 
 const Mines = [
@@ -15,7 +17,26 @@ const Mines = [
         name: 'mineView',
         component: View,
         meta: {
-          parent: 'mine'
+          parent: 'mine',
+          title: '我的护照'
+        }
+      },
+      {
+        path: 'detail',
+        name: 'mineDetail',
+        component: Detail,
+        meta: {
+          parent: 'mine',
+          title: '护照详情'
+        }
+      },
+      {
+        path: 'create',
+        name: 'mineCreate',
+        component: Create,
+        meta: {
+          parent: 'mine',
+          title: '创建护照'
         }
       },
     ]

@@ -25,13 +25,17 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      margin-bottom: 8px;
       box-sizing: border-box;
-      &:first-child {
-        margin-top: 8px;
-      }
-      &:nth-last-of-type(2) {
-        margin-bottom: 0px;
+      position: relative;
+      margin-top: 8px;
+      .del-img {
+        position: absolute;
+        right: 0%;
+        bottom: 0%;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        box-sizing: border-box;
       }
       .tourist-img {
         width: 64px;
@@ -48,11 +52,14 @@
         }
       }
     }
+    .van-button {
+      height: 100%;
+    }
   }
   .to-tourist {
     height: 43px;
     width: 60%;
-    margin: 10% auto 10%;
+    margin: 10% auto 10px;
     border-radius: 23px;
     border: 1px solid rgba(255, 153, 33, 1);
     font-size: 17px;
@@ -68,5 +75,10 @@
       background-size: 100%;
       margin-right: 8px;
     }
+  }
+  .to-tourist-remark {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 10%;
   }
 }
