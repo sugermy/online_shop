@@ -54,12 +54,11 @@ export default {
 			activeNames: [],
 			tabs: ['已使用', '待使用'],
 			userlist: [{}, {}],
-			nouselist: [{}, {},{},{},{}]
+			nouselist: [{}, {}, {}, {}, {}]
 		}
 	},
 	methods: {}
 }
 </script>
-<style lang="less" scoped>
-@import url('../../../style/order/detail.less');
+<style lang="less" scoped src="@/style/order/detail.less">
 </style>

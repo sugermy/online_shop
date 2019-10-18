@@ -6,6 +6,5 @@
 <script>
 export default {}
 </script>
-<style lang="less" scoped>
-@import url('../../../style/mine/create.less');
+<style lang="less" scoped src="@/style/mine/create.less">
 </style>

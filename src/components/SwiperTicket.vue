@@ -31,8 +31,8 @@ import QRCode from 'qrcodejs2' //引入二维码插件
 
 export default {
 	props: {
-		ticketlist: Array,
-		tickettype: String
+		ticketlist: Array, //订单票
+		tickettype: String //方便使用refs获取实例
 	},
 	data() {
 		return {}
@@ -46,7 +46,7 @@ export default {
 	},
 	methods: {
 		creatQrCode(name) {
-			var qrcode = new QRCode(name, {
+			let qrcode = new QRCode(name, {
 				width: 150,
 				height: 150,
 				text: 'code',

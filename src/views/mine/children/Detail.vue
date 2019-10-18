@@ -28,6 +28,5 @@ export default {
 	}
 }
 </script>
-<style lang="less" scoped>
-@import url('../../../style/mine/detail.less');
+<style lang="less" scoped src="@/style/mine/detail.less">
 </style>

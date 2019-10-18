@@ -86,7 +86,7 @@
 
     <!-- 时间选择器s -->
     <van-popup v-model="showDate" position="bottom">
-      <van-datetime-picker v-model="currentDate" type="date" :min-date="minDate" :max-date="maxDate" @cancel="cancelDate" @confirm="checkDate" />
+      <van-datetime-picker v-model="currentDate" type="date" :formatter="formatter" :min-date="minDate" :max-date="maxDate" @cancel="cancelDate" @confirm="checkDate" />
     </van-popup>
     <!-- 时间选择器e -->
 
@@ -186,6 +186,17 @@ export default {
 		}
 	},
 	methods: {
+		//日期格式化
+		formatter(type, value) {
+			if (type === 'year') {
+				return `${value}年`
+			} else if (type === 'month') {
+				return `${value}月`
+			} else if (type === 'day') {
+				return `${value}日`
+			}
+			return value
+		},
 		//选择日期
 		selectDate(v) {
 			this.pickDate = v
@@ -279,6 +290,5 @@ export default {
 	}
 }
 </script>
-<style lang="less" scoped>
-@import url('../../../style/home/buy.less');
+<style lang="less" scoped src="@/style/home/buy.less">
 </style>

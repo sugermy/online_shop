@@ -182,7 +182,5 @@ export default {
 	}
 }
 </script>
-<style lang="less" scoped>
-// 简化当前页面内容
-@import url('../../../style/home/index.less');
+<style lang="less" scoped src="@/style/home/index.less">
 </style>

@@ -51,6 +51,5 @@ export default {
 	}
 }
 </script>
-<style lang="less" scoped>
-@import url('../../../style/order/view.less');
+<style lang="less" scoped src="@/style/order/view.less">
 </style>
