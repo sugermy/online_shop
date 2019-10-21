@@ -81,7 +81,7 @@ export default {
 			},
 			canvasWidth: window.innerWidth * 0.8,
 			// canvasHeight: (window.innerHeight - 49) * 0.75,
-			canvasHeight: 430,
+			canvasHeight: 410,
 			canvasMask: null,
 			canvasTarget: null
 		}
@@ -153,6 +153,11 @@ export default {
 			this.$refs.headbg.onload = () => {
 				this.canvasTarget.drawImage(this.$refs.headbg, 0, 0, this.canvasWidth, 120)
 				this.canvasTarget.drawImage(this.$refs.headimg, 14, 30, 60, 60)
+				//二维码居中
+				let qrcodesquire = this.canvasWidth / 2
+				let centerPositonX = this.canvasWidth / 2 - qrcodesquire / 2
+				let centerPositonY = this.canvasHeight - qrcodesquire + 10
+				this.canvasTarget.drawImage(this.$refs.headqr, centerPositonX, centerPositonY, qrcodesquire, qrcodesquire)
 				this.drawTxt()
 				this.drawCode()
 			}
@@ -174,12 +179,6 @@ export default {
 		},
 		//填充二维码
 		drawCode() {
-			//二维码居中
-			let qrcodesquire = this.canvasWidth / 2
-			let centerPositonX = this.canvasWidth / 2 - qrcodesquire / 2
-			let centerPositonY = this.canvasHeight - qrcodesquire
-			this.canvasTarget.drawImage(this.$refs.headqr, centerPositonX, centerPositonY, qrcodesquire, qrcodesquire)
-
 			let imgSrc = this.canvasMask.toDataURL('image/png') || ''
 			if (imgSrc != '') {
 				this.imgSrc = imgSrc
