@@ -5,16 +5,16 @@ import Router from 'vue-router'
 import { HomeRouters, OrderRouters, MineRouters } from './routers'//路由---解构路由过滤
 import Ajax from './utils/ajax'//二次封装ajax
 import './utils/filter'//VUE过滤器
-import './utils/format'//VUE格式化
-
+import * as checkFun from './utils/format'//VUE格式化
 import './style/reset.less'//基础重置样式
 import './style/ui_reset.less'//基础UI框架重置样式
-import FastClick from "fastclick";//解决IOS点击事件300ms延迟
+// import FastClick from "fastclick";//解决IOS点击事件300ms延迟
 // FastClick.attach(document.body);
 /*Vant 插件的按需引入*/
-import { Cell, CellGroup, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, Field, Collapse, CollapseItem, Image } from 'vant';
+import { Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, Field, Collapse, CollapseItem, Image } from 'vant';
 Vue.prototype.$toast = Toast
 Vue.use(Cell).use(CellGroup);//Cell 单元格
+Vue.use(Overlay);//遮罩
 Vue.use(Button)//按钮组件
 Vue.use(Lazyload, {})//懒加载组件---主要用在加载图片
 Vue.use(Swipe).use(SwipeItem);//轮播图组件
@@ -35,6 +35,10 @@ Vue.config.productionTip = process.env.NODE_ENV === 'development'
 
 let newAjax = new Ajax('', window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
 Vue.prototype.$ajax = newAjax
+
+let { checkCard, checkPhone } = checkFun //原型扩展  正则验证身份证
+Vue.prototype.$checkCard = checkCard
+Vue.prototype.$checkPhone = checkPhone
 //process.env  开发环境属性
 
 /*根据业务需求方法过滤需要的路由---设置无权限路由是为了防止用户直接输入地址可访问未授权的页面内容*/

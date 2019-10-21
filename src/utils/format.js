@@ -19,3 +19,13 @@ Date.prototype.format = function (fmt) {
   }
   return fmt;
 }
+
+let checkCard = function checkIdCard (code) {
+  return /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code);
+}
+
+let checkPhone = function checkIdCard (phone) {
+  return /^1(3|4|5|6|7|8|9)\d{9}$/.test(phone);
+}
+
+export { checkCard, checkPhone }
