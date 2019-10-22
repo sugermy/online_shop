@@ -83,14 +83,19 @@ export default {
 			// canvasHeight: (window.innerHeight - 49) * 0.75,
 			canvasHeight: 410,
 			canvasMask: null,
-			canvasTarget: null
+			canvasTarget: null,
+			timerOut: null
 		}
 	},
 	created() {},
 	mounted() {
-		this.$nextTick(() => {
-			this.initCanvas()
-		})
+		// this.$nextTick(() => {
+		// 	this.initCanvas()
+		// })
+		let _this = this
+		setTimeout(function() {
+			_this.initCanvas()
+		}, 1000)
 	},
 	methods: {
 		//第一步生成护照
@@ -138,8 +143,18 @@ export default {
 		goBuy() {},
 		//分享
 		share() {
-			this.showMask = true
-			console.log(this.canvasHeight)
+			this.$toast.loading({
+				duration: 0,
+				loadingType: 'spinner',
+				forbidClick: true,
+				message: '正在创建...'
+			})
+			let _this = this
+			this.timerOut = setTimeout(() => {
+				clearTimeout(_this.timerOut)
+				_this.$toast.clear()
+				_this.showMask = true
+			}, 3000)
 		},
 		initCanvas() {
 			this.canvasMask = this.$refs.canvas
@@ -150,17 +165,17 @@ export default {
 		},
 		//构画顶部背景
 		drawBg() {
-			this.$refs.headbg.onload = () => {
-				this.canvasTarget.drawImage(this.$refs.headbg, 0, 0, this.canvasWidth, 120)
-				this.canvasTarget.drawImage(this.$refs.headimg, 14, 30, 60, 60)
-				//二维码居中
-				let qrcodesquire = this.canvasWidth / 2
-				let centerPositonX = this.canvasWidth / 2 - qrcodesquire / 2
-				let centerPositonY = this.canvasHeight - qrcodesquire + 10
-				this.canvasTarget.drawImage(this.$refs.headqr, centerPositonX, centerPositonY, qrcodesquire, qrcodesquire)
-				this.drawTxt()
-				this.drawCode()
-			}
+			// this.$refs.headbg.onload = () => {
+			this.canvasTarget.drawImage(this.$refs.headbg, 0, 0, this.canvasWidth, 120)
+			this.canvasTarget.drawImage(this.$refs.headimg, 14, 30, 60, 60)
+			//二维码居中
+			let qrcodesquire = this.canvasWidth / 2
+			let centerPositonX = this.canvasWidth / 2 - qrcodesquire / 2
+			let centerPositonY = this.canvasHeight - qrcodesquire + 10
+			this.canvasTarget.drawImage(this.$refs.headqr, centerPositonX, centerPositonY, qrcodesquire, qrcodesquire)
+			this.drawTxt()
+			this.drawCode()
+			// }
 		},
 		//填充文字
 		drawTxt() {
