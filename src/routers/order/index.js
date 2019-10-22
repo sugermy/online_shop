@@ -3,6 +3,7 @@
 const Order = () => import('../../views/order/index.vue');
 const View = () => import('../../views/order/children/View.vue');
 const Detail = () => import('../../views/order/children/Detail.vue');
+const Refund = () => import('../../views/order/children/Refund.vue');
 
 
 const Orders = [
@@ -19,6 +20,15 @@ const Orders = [
         meta: {
           parent: 'order',
           title: '我的订单'
+        }
+      },
+      {
+        path: 'refund',
+        name: 'orderRefund',
+        component: Refund,
+        meta: {
+          parent: 'order',
+          title: '发起退款'
         }
       },
       {

@@ -3,7 +3,7 @@
     <van-tabs v-model="active" animated>
       <van-tab v-for="(item,index) in tabs" :key="index" :title="item" sticky :swipe-threshold="5" name="tab-item">
         <div class="product-con">
-          <div class="product-item" v-for="(item,index) in productlist" :key="index" @click="enterDetail">
+          <div class="product-item" v-for="(item,index) in productlist" :key="index" @click="enterDetail(item.paytype)">
             <h3 class="pro-orderno">订单号：1231231231456</h3>
             <div class="pro-info">
               <img class="pro-tourist" src="../../../assets/head_photo.png">
@@ -18,10 +18,10 @@
             </div>
             <div class="pro-footer">
               <span class="date">2019-04-01 13:00:00</span>
-              <span v-if="item.paytype==0" class="status to-pay">支付</span>
-              <span v-if="item.paytype==1" class="status to-refound">退款</span>
+              <span v-if="item.paytype==0" class="status to-pay" @click.stop="payAgain">支付</span>
+              <span v-if="item.paytype==1" class="status to-refound" @click.stop="refund">退款</span>
               <span v-if="item.paytype==2" class="status to-used">已使用</span>
-              <span v-if="item.paytype==3" class="status to-refounded">退款完成</span>
+              <span v-if="item.paytype==3" class="status to-refounded">查看详情</span>
             </div>
             <img class="status-img" :src="require(`../../../assets/status${item.paytype}.png`)">
           </div>
@@ -40,6 +40,19 @@ export default {
 		}
 	},
 	methods: {
+		//再次支付
+		payAgain() {
+			console.log(1)
+		},
+		//退款
+		refund() {
+			this.$router.push({
+				path: './Refund',
+				query: {
+					id: 1
+				}
+			})
+		},
 		enterDetail() {
 			this.$router.push({
 				path: './detail',

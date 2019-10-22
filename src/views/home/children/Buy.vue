@@ -56,7 +56,7 @@
     </div>
     <!-- 产品操作e -->
 
-    <!-- 游客绑定s -->
+    <!-- 游客绑定出行人s -->
     <div class="buy-part part-tourist">
       <h3 class="part-title">出行人信息</h3>
       <div class="tourist-action">
@@ -71,11 +71,11 @@
           <p class="i-name" v-show="item.name">{{item.name}}</p>
           <p class="i-card i-txt" v-show="item.card">身份证号：{{item.card}}</p>
           <p class="i-phone i-txt" v-show="item.phone">手机号：{{item.phone}}</p>
-          <i class="check-edit" @click="touristEdit(item.id)"></i>
+          <i class="check-edit" @click="touristEdit(item.id,'直接编辑')"></i>
         </div>
       </div>
     </div>
-    <!-- 游客绑定e -->
+    <!-- 游客绑定出行人e -->
     <div class="buy-pay">
       <div class="pay-total">
         <i>合计：</i>
@@ -109,7 +109,7 @@
               <p class="i-card i-txt" v-show="item.card">身份证号：{{item.card}}</p>
               <p class="i-phone i-txt" v-show="item.phone">手机号：{{item.phone}}</p>
             </div>
-            <div class="per-edit" @click="touristEdit(item.id)"></div>
+            <div class="per-edit" @click="touristEdit(item.id,'弹窗内编辑')"></div>
           </div>
         </div>
       </main>
@@ -339,7 +339,7 @@ export default {
 		//同意条款---立即购买
 		passClause() {
 			if (this.checked) {
-				this.$toast('同意条款')
+				this.$toast('同意条款，提交订单')
 				this.showClause = false
 			} else {
 				this.$toast('请确认已仔细阅读条款内容')

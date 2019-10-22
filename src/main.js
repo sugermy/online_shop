@@ -11,7 +11,7 @@ import './style/ui_reset.less'//基础UI框架重置样式
 // import FastClick from "fastclick";//解决IOS点击事件300ms延迟
 // FastClick.attach(document.body);
 /*Vant 插件的按需引入*/
-import { Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, Field, Collapse, CollapseItem, Image } from 'vant';
+import { Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, RadioGroup, Radio, Field, Collapse, CollapseItem, Image } from 'vant';
 Vue.prototype.$toast = Toast
 Vue.use(Cell).use(CellGroup);//Cell 单元格
 Vue.use(Overlay);//遮罩
@@ -25,6 +25,8 @@ Vue.use(Popup);//页面弹出
 Vue.use(DatetimePicker);//时间选择器
 Vue.use(Stepper);//计数器
 Vue.use(Checkbox).use(CheckboxGroup);//复选框
+Vue.use(RadioGroup);//单选组
+Vue.use(Radio);//单选插件
 Vue.use(Field);//表单中的输入框组件
 Vue.use(Collapse).use(CollapseItem);//折叠面板
 Vue.use(Image);//图片
@@ -46,6 +48,7 @@ Vue.prototype.$checkPhone = checkPhone
 
 /*根据业务需求方法过滤需要的路由---设置无权限路由是为了防止用户直接输入地址可访问未授权的页面内容*/
 let allRouter = new Router({
+  mode: 'history',
   routes: [...HomeRouters, ...OrderRouters, ...MineRouters]
 })
 

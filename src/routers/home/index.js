@@ -32,7 +32,7 @@ const Homes = [
       },
       {
         path: 'buy',
-        name: 'Buy',
+        name: 'homeBuy',
         component: Buy,
         meta: {
           parent: 'home',
@@ -41,7 +41,7 @@ const Homes = [
       },
       {
         path: 'need',
-        name: 'Need',
+        name: 'homeNeed',
         component: Need,
         meta: {
           parent: 'home',
