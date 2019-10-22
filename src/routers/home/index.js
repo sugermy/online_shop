@@ -7,6 +7,7 @@ store.dispatch('setShopName', '南岳衡山交通')
 const Home = () => import('../../views/home/index.vue');
 const View = () => import('../../views/home/children/View.vue');
 const Buy = () => import('../../views/home/children/Buy.vue');
+const Need = () => import('../../views/home/children/Need.vue');
 
 
 const Homes = [
@@ -26,7 +27,7 @@ const Homes = [
         component: View,
         meta: {
           parent: 'home',
-          title: store.state.shopName
+          title: store.state.shopInfo.shopName
         }
       },
       {
@@ -36,6 +37,15 @@ const Homes = [
         meta: {
           parent: 'home',
           title: '购票详情'
+        }
+      },
+      {
+        path: 'need',
+        name: 'Need',
+        component: Need,
+        meta: {
+          parent: 'home',
+          title: '购票须知'
         }
       },
     ]

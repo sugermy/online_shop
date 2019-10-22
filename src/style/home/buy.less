@@ -335,3 +335,46 @@
     padding: 15px 16px;
   }
 }
+.clause-per {
+  .clause-header {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    .pass-stu {
+      height: 100%;
+      line-height: 60px;
+      padding: 0 8px;
+    }
+    .no-pass {
+      color: #999;
+    }
+    .to-pass {
+      color: #ff9921;
+    }
+  }
+  .clause-collapse {
+    height: calc(100% - 100px);
+    overflow-y: auto;
+    /deep/.rules-title {
+      color: #333;
+      &::before {
+        content: "";
+        width: 3px;
+        height: 14px;
+        background: #ff9921;
+        position: absolute;
+        top: 35%;
+        left: 2.5%;
+      }
+    }
+  }
+  .clause-footer {
+    margin: 20px 0 0;
+    /deep/ .van-checkbox__label {
+      font-size: 14px;
+      color: #333;
+    }
+  }
+}

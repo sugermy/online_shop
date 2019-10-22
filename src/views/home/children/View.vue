@@ -151,11 +151,11 @@ export default {
 			], //游玩须知内容
 			baseImg: require('@/assets/pic.png'), //适用人群的图标
 			showProp: false, //显示弹出层操作
-			showProduct: {} //弹出层内容
+			showProduct: {} //弹出层产品内容
 		}
 	},
 	methods: {
-		//显示产品弹窗
+		//显示产品内容弹窗
 		showDetail(name, v) {
 			this.showProp = true
 			this.showProduct = v

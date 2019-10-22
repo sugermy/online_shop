@@ -33,6 +33,9 @@ Vue.use(Router)
 //设置vue在启动时是否生成生产提示
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
 
+// store.dispatch('getOpenID').then(() => {
+//   console.log(store);
+// })
 let newAjax = new Ajax('', window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
 Vue.prototype.$ajax = newAjax
 

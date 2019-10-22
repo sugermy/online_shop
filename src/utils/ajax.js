@@ -1,21 +1,22 @@
 import axios from "axios";
 const baseURL = window.SYSTEM_CONFIG.webServer; //基础服务地址
+
 export default class Ajax {
   /**
-   * @param { String } baseURL        基础请求地址
-   * @param { String } Token          通行凭证token
+   * @param { String } WebURL        基础请求地址
+   * @param { String } OpenId         通行凭证OpenId
    * @param { Number } TIMEOUT        超时时间
    * @param { String } MerchantCode   商户号
    */
-  constructor(Token = "", MerchantCode = "", TIMEOUT = 60000) {
-    // 创建一个新的axios实例，并设置默认请求地址和请求头
+  constructor(OpenId = "", MerchantCode = "", TIMEOUT = 60000) {
+    // 创建一个新的axios实例，并设置默认请求头
     this._axios = axios.create({
       baseURL,
       TIMEOUT,
       params: {
-        MerchantCode: MerchantCode
+        OpenId,
+        MerchantCode
       },
-      headers: { Token }
     });
     this._axios.interceptors.request.use(
       config => {

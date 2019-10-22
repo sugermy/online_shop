@@ -81,7 +81,7 @@
         <i>合计：</i>
         <span class="pay-price">￥300</span>
       </div>
-      <div class="pay-action">立即购买</div>
+      <div class="pay-action" @click="buyNow">立即购买</div>
     </div>
 
     <!-- 时间选择器s -->
@@ -132,6 +132,38 @@
       </main>
     </van-popup>
     <!-- 编辑游客信息e -->
+
+    <!-- 条款信息s -->
+    <van-popup v-model="showClause" :close-on-click-overlay="false" class="show-per clause-per" round position="bottom">
+      <div class="clause-header">
+        <span class="no-pass pass-stu" @click="noPassClause">不同意</span>
+        <span class="name">服务条款</span>
+        <span class="to-pass pass-stu" @click="passClause">同意</span>
+      </div>
+      <div class="clause-collapse">
+        <van-collapse v-model="activeNames">
+          <van-collapse-item title="产品介绍" name="1" title-class="rules-title" :is-link="true">
+            <div class="collapse-item">
+              欲将沉醉换悲凉，清歌莫断肠。这混乱的尘世，究竟充斥了多少绝望和悲伤。你想去做一个勇敢的男子，为爱，为信仰，轰轰烈烈的奋斗一场。你周身充斥着无人可比的灵气和光芒。你有着与伟人比肩的才气和名声，你是那样高傲孤洁的男子。你的一寸狂心未说，已经几度黄昏雨'
+            </div>
+          </van-collapse-item>
+          <van-collapse-item title="使用规则" name="2" title-class="rules-title" :is-link="true">
+            <div class="collapse-item">
+              欲将沉醉换悲凉，清歌莫断肠。这混乱的尘世，究竟充斥了多少绝望和悲伤。你想去做一个勇敢的男子，为爱，为信仰，轰轰烈烈的奋斗一场。你周身充斥着无人可比的灵气和光芒。你有着与伟人比肩的才气和名声，你是那样高傲孤洁的男子。你的一寸狂心未说，已经几度黄昏雨'
+            </div>
+          </van-collapse-item>
+          <van-collapse-item title="退票规则" name="3" title-class="rules-title" :is-link="true">
+            <div class="collapse-item">
+              一段情，反复的掂量，最后加深了岁月的绵长。一路追赶里，一路追忆里，最后得到的是什么，最后又失去的是什么。或许，只有我们在静思的时候才会明白，这路的追忆里，我们得到的快乐往往比痛苦要少。当相思成殇的时候，除了对月徒悲叹之外，什么也不曾抓到
+            </div>
+          </van-collapse-item>
+        </van-collapse>
+      </div>
+      <div class="clause-footer">
+        <van-checkbox v-model="checked" checked-color="#26A4FF" icon-size="14px" shape="square">我已阅读上述服务条款</van-checkbox>
+      </div>
+    </van-popup>
+    <!-- 条款信息e -->
   </div>
 </template>
 <script>
@@ -144,6 +176,8 @@ export default {
 			showDate: false,
 			showPer: false,
 			showEdit: false,
+			showClause: false,
+			checked: false,
 			perMaster: { name: '', phone: '', idcard: '' },
 			currentDate: new Date(),
 			otherDate: new Date().format('MM-dd'),
@@ -159,7 +193,8 @@ export default {
 				{ name: '梅干菜包', id: 8, card: '411381199409054817', phone: '18520838663', checked: false },
 				{ name: '香菇包', id: 9, card: '411381199409054817', phone: '18520838663', checked: false },
 				{ name: '花卷', id: 10, card: '411381199409054817', phone: '18520838663', checked: false }
-			]
+			],
+			activeNames: ['1', '2', '3']
 		}
 	},
 	created() {
@@ -285,7 +320,30 @@ export default {
 		selectPre() {},
 		// 进入产品购买须知
 		enterRules() {
-			console.log('enterRules')
+			this.$router.push({
+				path: './need',
+				query: {
+					proid: JSON.stringify(this.perMaster)
+				}
+			})
+		},
+		//立即购买
+		buyNow() {
+			this.showClause = true
+		},
+		//不同意条款
+		noPassClause() {
+			this.$toast('不同意条款，已取消提交订单')
+			this.showClause = false
+		},
+		//同意条款---立即购买
+		passClause() {
+			if (this.checked) {
+				this.$toast('同意条款')
+				this.showClause = false
+			} else {
+				this.$toast('请确认已仔细阅读条款内容')
+			}
 		}
 	}
 }

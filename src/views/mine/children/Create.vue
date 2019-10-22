@@ -62,7 +62,7 @@ export default {
 			showMask: false,
 			showCanvas: true,
 			imgSrc: '',
-			step: 2,
+			step: 1,
 			stepTwoProcessNormal: require('../../../assets/process_normal.png'),
 			stepTwoProcessLink: require('../../../assets/process_link.png'),
 			stepTwoImgNormal: require('../../../assets/circle_normal.png'),
@@ -139,8 +139,12 @@ export default {
 
 			this.step = 2
 		},
-		//第二步点击购买
-		goBuy() {},
+		//第二步点击购买---返回首页产品列表
+		goBuy() {
+			this.$router.push({
+				path: '/home'
+			})
+		},
 		//分享
 		share() {
 			this.$toast.loading({
@@ -156,6 +160,7 @@ export default {
 				_this.showMask = true
 			}, 3000)
 		},
+		//初始化canvas
 		initCanvas() {
 			this.canvasMask = this.$refs.canvas
 			this.canvasMask.width = this.canvasWidth
