@@ -1,11 +1,11 @@
 export default {
-  setShopName (state, data) {
-    state.shopInfo.shopName = data;
+  setUserInfo (state, data) {
+    state.userInfo = data;
   },
   setShopInfo (state, data) {
     state.shopInfo = data;
   },
-  setOpenId (state, data) {
-    state.openId = data
+  setRedirectUrl (state, data) {
+    state.redirectUrl = data
   }
 }

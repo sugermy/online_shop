@@ -2,7 +2,6 @@
 
 import store from '../../vuex'
 //商城基本信息获取，设置属性
-store.dispatch('setShopName', '南岳衡山交通')
 
 const Home = () => import('../../views/home/index.vue');
 const View = () => import('../../views/home/children/View.vue');

@@ -10,9 +10,10 @@ import './style/reset.less'//基础重置样式
 import './style/ui_reset.less'//基础UI框架重置样式
 // import FastClick from "fastclick";//解决IOS点击事件300ms延迟
 // FastClick.attach(document.body);
-/*Vant 插件的按需引入*/
-import { Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, RadioGroup, Radio, Field, Collapse, CollapseItem, Image } from 'vant';
+/*Vant*/
+import { PullRefresh, Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, RadioGroup, Radio, Field, Collapse, CollapseItem, Image } from 'vant';
 Vue.prototype.$toast = Toast
+Vue.use(PullRefresh);//下拉刷新
 Vue.use(Cell).use(CellGroup);//Cell 单元格
 Vue.use(Overlay);//遮罩
 Vue.use(Button)//按钮组件
@@ -31,34 +32,57 @@ Vue.use(Field);//表单中的输入框组件
 Vue.use(Collapse).use(CollapseItem);//折叠面板
 Vue.use(Image);//图片
 
-Vue.use(Router)
 //设置vue在启动时是否生成生产提示
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
-
-// store.dispatch('getOpenID').then(() => {
-//   console.log(store);
-// })
-let newAjax = new Ajax('', window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
-Vue.prototype.$ajax = newAjax
-
 let { checkCard, checkPhone } = checkFun //原型扩展  正则验证身份证
 Vue.prototype.$checkCard = checkCard
 Vue.prototype.$checkPhone = checkPhone
-//process.env  开发环境属性
 
-/*根据业务需求方法过滤需要的路由---设置无权限路由是为了防止用户直接输入地址可访问未授权的页面内容*/
+/*router*/
 let allRouter = new Router({
   mode: 'history',
   routes: [...HomeRouters, ...OrderRouters, ...MineRouters]
 })
+Vue.use(Router)
 
-renderApp(allRouter)
-//正常权限执行
+//根据code换取当前登陆用户的个人信息
+let code = getQuery('code');
+if (code && code != '') {
+  getUser(code)
+} else {//缺省页地址栏无code 说明暂无授权
+  // 暂时不用重定向回调code获取用户信息方便开发调试
+  // store.dispatch('getRedirectUrl').then(() => {
+  //   location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl
+  // })
+  getUser('manyiTest')
+}
+
+//登陆
+function getUser (code) {
+  store.dispatch('getUserInfo', code).then(() => {
+    let newAjax = new Ajax(store.state.userInfo.openid, window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
+    Vue.prototype.$ajax = newAjax
+    getShop()
+  })
+}
+//登陆获取商城信息
+function getShop () {
+  store.dispatch('getShopInfo').then((res) => {
+    if (res == 200) {
+      //设置商城名称
+      document.title = store.state.shopInfo.ShopName;
+      renderApp(allRouter)
+    } else {
+      Toast('获取商城信息失败')
+    }
+  })
+}
+
+//template
 function renderApp (router) {
-  //设置动态title
+  //router-title
   router.beforeEach((to, from, next) => {
     if (to.meta.title) {
-      //跳转前动态设置当前title
       document.title = to.meta.title;
     }
     next();
@@ -68,4 +92,24 @@ function renderApp (router) {
     store,
     render: h => h(App)
   }).$mount('#app')
+}
+
+//toast
+let loading = function loadding () {
+  Toast.loading({
+    message: '加载中...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0
+  })
+}
+let closeing = function loadding () {
+  Toast.clear()
+}
+Vue.prototype.$load = loading
+Vue.prototype.$close = closeing
+
+/* 获取url中的参数 */
+function getQuery (name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
 }

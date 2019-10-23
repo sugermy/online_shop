@@ -15,7 +15,7 @@ export default class Ajax {
       TIMEOUT,
       params: {
         OpenId,
-        MerchantCode
+        MerchantCode: MerchantCode
       },
     });
     this._axios.interceptors.request.use(
@@ -37,9 +37,9 @@ export default class Ajax {
   }
   // 请求方式
   get (url, params = {}) {
-    return this._axios({ method: "get", url, params });
+    return this._axios({ method: "get", url, params: { ...this._axios.defaults.params, ...params } });
   }
   post (url, params = {}, data = {}) {
-    return this._axios({ method: "post", url, data, params });
+    return this._axios({ method: "post", url, data, params: { ...this._axios.defaults.params, ...params } });
   }
 }

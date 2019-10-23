@@ -1,7 +1,7 @@
 // const path = require('path');//引入path模块
 module.exports = {
   devServer: {
-    // port: 9000,
+    port: 9527,
     // open: true
   },
   // chainWebpack: (config) => {

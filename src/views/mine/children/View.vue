@@ -3,7 +3,7 @@
     <div v-if="tourist.length==0" class="no-data">
       <img src="../../../assets/box.png">
       <p class="no-data-info">您还没有创建旅游护照哦~</p>
-      <p class="to-tourist">
+      <p class="to-tourist" @click="creatAction">
         <i class="tourist-icon"></i>
         <span class="tourist-txt">创建旅游护照</span>
       </p>
@@ -36,11 +36,19 @@
 export default {
 	data() {
 		return {
-			tourist: [{}, {}]
+			tourist: []
 		}
 	},
 	mounted() {},
+	created() {
+		this.getList()
+	},
 	methods: {
+		getList() {
+			this.$ajax.get('Home/Passport_GetList', {}).then(res => {
+				this.tourist = res.Data
+			})
+		},
 		enterDetail() {
 			this.$router.push({
 				path: './detail',

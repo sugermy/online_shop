@@ -4,25 +4,25 @@
     <div class="buy-part part-date">
       <h3 class="part-title">使用日期</h3>
       <div class="part-main">
+        <div class="part-date-item" :class="pickDate==0?'pick-date':''" @click="selectDate(0)">
+          <p>今日{{dayPrice[0].DateStr | formatdate}}</p>
+          <p>￥{{dayPrice[0].SellPrice}}</p>
+          <i class="pick-icon" v-show="pickDate==0"></i>
+        </div>
         <div class="part-date-item" :class="pickDate==1?'pick-date':''" @click="selectDate(1)">
-          <p>今日{{todayDate}}</p>
-          <p>￥300</p>
+          <p>明日{{dayPrice[1].DateStr | formatdate}}</p>
+          <p>￥{{dayPrice[1].SellPrice}}</p>
           <i class="pick-icon" v-show="pickDate==1"></i>
         </div>
         <div class="part-date-item" :class="pickDate==2?'pick-date':''" @click="selectDate(2)">
-          <p>明日{{tomorrowDate}}</p>
-          <p>￥310</p>
+          <p>后日{{dayPrice[2].DateStr | formatdate}}</p>
+          <p>￥{{dayPrice[2].SellPrice}}</p>
           <i class="pick-icon" v-show="pickDate==2"></i>
         </div>
         <div class="part-date-item" :class="pickDate==3?'pick-date':''" @click="selectDate(3)">
-          <p>后日{{afterDate}}</p>
-          <p>￥320</p>
-          <i class="pick-icon" v-show="pickDate==3"></i>
-        </div>
-        <div class="part-date-item" :class="pickDate==4?'pick-date':''" @click="selectDate(4)">
           <p>其他{{otherDate}}</p>
-          <p>￥300</p>
-          <i class="pick-icon" v-show="pickDate==4"></i>
+          <p>￥{{otherPrice}}</p>
+          <i class="pick-icon" v-show="pickDate==3"></i>
         </div>
       </div>
     </div>
@@ -32,22 +32,23 @@
     <div class="buy-part part-info">
       <h3 class="part-title">产品信息</h3>
       <div class="part-main">
-        <img class="part-img" src="../../../assets/pic.png" v-if="$route.query.id==1">
-        <div class="part-info" :class="$route.query.id==1?'has-img':''">
-          <p class="part-name">珠海长隆国际马戏城</p>
-          <p class="part-detail ellipsis">太平湖宽处烟波浩渺，似洞庭之坦荡…</p>
+        <img class="part-img" :src="productInfo.ProductImg" v-if="$route.query.hasImg==2">
+        <div class="part-info" :class="$route.query.hasImg==2?'has-img':''">
+          <p class="part-name">{{productInfo.ProductName}}</p>
+          <p class="part-detail ellipsis">{{productInfo.ProductIntroduce}}</p>
           <div class="part-action">
-            <span class="part-price">￥250</span>
-            <van-stepper button-size="20px" @change="changeNum" @plus="addNum" @minus="reduceNum" integer v-model="setpValue" />
+            <span class="part-price">￥{{sellPrice}}</span>
+            <van-stepper button-size="20px" @change="changeNum" @plus="addNum" @minus="reduceNum" :min="productInfo.SellMin" :max="productInfo.SellMax" integer
+              v-model="setpValue" />
           </div>
         </div>
       </div>
       <div class="part-rules">
         <div class="part-rules-list">
           <i class="rules-icon"></i>
-          <span>交通票</span>
-          <i class="rules-line">|</i>
-          <span>适用人群：18至25岁</span>
+          <span>{{productInfo.ProductType}}</span>
+          <i class="rules-line" v-if="productInfo.IsLimitAge">|</i>
+          <span v-if="productInfo.IsLimitAge">适用人群：{{productInfo.ShowLimitAge}}</span>
         </div>
         <div class="part-rules-enter" @click="enterRules">
           购买须知 >
@@ -79,7 +80,7 @@
     <div class="buy-pay">
       <div class="pay-total">
         <i>合计：</i>
-        <span class="pay-price">￥300</span>
+        <span class="pay-price">￥{{totalMoney}}</span>
       </div>
       <div class="pay-action" @click="buyNow">立即购买</div>
     </div>
@@ -103,7 +104,7 @@
         </div>
         <div class="main-content">
           <div v-for="(item,index) in tourist" :key="index" class="per-item">
-            <van-checkbox v-model="item.checked" shape="square" checked-color="#FF9921"></van-checkbox>
+            <van-checkbox v-model="item.checked" shape="square" checked-color="#FF9921" :ref="`newTourist${item.id}`" @click="changeNewStu($event,item)"></van-checkbox>
             <div class="per-info">
               <p class="i-name" v-show="item.name">{{item.name}}</p>
               <p class="i-card i-txt" v-show="item.card">身份证号：{{item.card}}</p>
@@ -170,9 +171,9 @@
 export default {
 	data() {
 		return {
-			pickDate: 1,
-			setpValue: 1,
-			chosePer: [{}],
+			pickDate: 0, //选择购买日期
+			setpValue: 1, //当前选择数量
+			chosePer: [{}], //已选择游客
 			showDate: false,
 			showPer: false,
 			showEdit: false,
@@ -180,8 +181,12 @@ export default {
 			checked: false,
 			perMaster: { name: '', phone: '', idcard: '' },
 			currentDate: new Date(),
-			otherDate: new Date().format('MM-dd'),
-			minDate: new Date(),
+			otherDate: '', //其他日期
+			otherPrice: '', //其他日期价格
+			minDate: new Date(), //时间选择器最小为当日
+			dayPrice: [{}, {}, {}], //日期价
+			sellPrice: null, //当日售卖价格
+			productInfo: {}, //产品信息
 			tourist: [
 				{ name: '小笼包', id: 1, card: '411381199409054817', phone: '18520838663', checked: false },
 				{ name: '小肉包', id: 2, card: '411381199409054817', phone: '18520838663', checked: false },
@@ -199,28 +204,36 @@ export default {
 	},
 	created() {
 		// console.log(this.$route.query)
+		this.getProduct()
 	},
 	computed: {
-		//今日日期
-		todayDate() {
-			return new Date().format('MM-dd')
-		},
-		//明日日期
-		tomorrowDate() {
-			let today = new Date()
-			return new Date(today.getTime() + 24 * 60 * 60 * 1000).format('MM-dd')
-		},
-		//后日日期
-		afterDate() {
-			let today = new Date()
-			return new Date(today.getTime() + 24 * 60 * 60 * 1000 * 2).format('MM-dd')
-		},
 		//最大可购买日期
 		maxDate() {
-			return new Date(this.minDate.getTime() + 24 * 60 * 60 * 1000 * 30)
+			return new Date(this.minDate.getTime() + 24 * 60 * 60 * 1000 * 15)
+		},
+		//总价计算
+		totalMoney() {
+			return (this.sellPrice * this.setpValue).toFixed(2) //四舍五入---or取两位小数parseInt(this.sellPrice * this.setpValue*100)/100
 		}
 	},
 	methods: {
+		//获取产品详情
+		getProduct() {
+			this.$load()
+			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId }).then(res => {
+				this.$close()
+				// this.tourist = res.Data.PassengerInfo
+				this.productInfo = res.Data.ProductInfo
+				this.setpValue = res.Data.ProductInfo.SellMin
+				this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
+					return index <= 2
+				})
+				this.sellPrice = this.dayPrice[0].SellPrice
+				this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
+				this.otherPrice = this.dayPrice[0].SellPrice
+			})
+		},
+
 		//日期格式化
 		formatter(type, value) {
 			if (type === 'year') {
@@ -235,16 +248,21 @@ export default {
 		//选择日期
 		selectDate(v) {
 			this.pickDate = v
-			if (v == 4) {
+			if (v == 3) {
 				this.showDate = true
 			} else {
-				console.log(1)
+				this.sellPrice = this.dayPrice[v].SellPrice
 			}
 		},
 		//确定日期选择
 		checkDate(v) {
 			this.showDate = false
-			this.otherDate = v.format('MM-dd')
+			let date = v.format('yyyy-MM-dd')
+			this.$ajax.get('Home/Order_GetProductPrice', { ProductID: this.$route.query.productId, PlayDate: date }).then(res => {
+				this.otherDate = v.format('MM-dd')
+				this.otherPrice = res.Data[0].SellPrice
+				this.sellPrice = res.Data[0].SellPrice
+			})
 		},
 		//取消日期选择
 		cancelDate() {
@@ -252,27 +270,37 @@ export default {
 		},
 		// 数量增加操作
 		addNum() {
-			this.chosePer.push({})
+			if (this.productInfo.PickTicket == 0) {
+				//为0 大票
+			} else {
+				//为1 一人一票
+				this.chosePer.push({})
+			}
 		},
 		//数量减少操作
 		reduceNum() {
 			// 根据票种类型判断是否执行以下代码
-			this.chosePer.pop()
-			this.tourist.forEach(el => {
-				el.checked = false
-			})
-			//先修改整体游客为false--再做循环添加checked
-			this.chosePer.forEach(el => {
-				this.tourist.forEach(kl => {
-					if (el.id == kl.id) {
-						kl.checked = true
-					}
+			if (this.productInfo.PickTicket == 0) {
+				//为0 大票
+			} else {
+				//为1 一人一票
+				this.chosePer.pop()
+				this.tourist.forEach(el => {
+					el.checked = false
 				})
-			})
+				//先修改整体游客为false--再做循环添加checked
+				this.chosePer.forEach(el => {
+					this.tourist.forEach(kl => {
+						if (el.id == kl.id) {
+							kl.checked = true
+						}
+					})
+				})
+			}
 		},
 		//输入框值改变
 		changeNum(v) {
-			console.log(v)
+			// console.log(v)
 		},
 		//编辑游客
 		touristEdit(id) {
@@ -286,50 +314,83 @@ export default {
 			}
 		},
 		//快捷选中游客
-		chooseItem(item) {
+		chooseItem(item, sign) {
 			// 根据票种设置单选或复选
-			if (item.checked == true) {
-				//取消选中
-				item.checked = !item.checked
-				this.chosePer = this.chosePer.map(el => {
-					if (el.id == item.id) {
-						return {}
-					} else {
-						return el
-					}
-				})
-			} else {
-				//选中数据
-				let checkedPer = this.tourist.filter(el => el.checked == true)
-				if (checkedPer.length < this.setpValue) {
-					item.checked = !item.checked
-					let nouseIndex = this.chosePer.findIndex(val => {
-						return !val.name || val.name == ''
-					})
-					this.chosePer[nouseIndex] = item
+			if (this.productInfo.PickTicket == 0) {
+				//为0 大票
+				if (item.checked) {
+					this.tourist.forEach(el => (el.checked = false))
+					item.checked = false
+					this.chosePer = [{}]
 				} else {
-					this.$toast('已达到最大出行人数')
+					this.tourist.forEach(el => (el.checked = false))
+					item.checked = true
+					this.chosePer = [item]
+				}
+			} else {
+				//为1 一人一票
+				if (item.checked == true) {
+					//取消选中
+					item.checked = !item.checked
+					this.chosePer = this.chosePer.map(el => {
+						if (el.id == item.id) {
+							return {}
+						} else {
+							return el
+						}
+					})
+				} else {
+					//选中数据
+					let checkedPer = this.tourist.filter(el => el.checked == true)
+					if (checkedPer.length < this.setpValue) {
+						item.checked = !item.checked
+						let nouseIndex = this.chosePer.findIndex(val => {
+							return !val.name || val.name == ''
+						})
+						this.chosePer[nouseIndex] = item
+					} else {
+						this.$toast('已达到最大出行人数')
+						if (sign) {
+							//阻止默认事件选中状态
+							this.$refs[`newTourist${item.id}`][0].toggle(false)
+						}
+					}
 				}
 			}
+		},
+		//新增编辑游客中点击选中或取消
+		changeNewStu(event, item) {
+			this.chooseItem(item, 'new')
 		},
 		// 开启新增编辑游客弹窗
 		openTourist() {
 			this.showPer = true
 		},
 		//确定选中游客
-		selectPre() {},
+		selectPre() {
+			this.showPer = false
+		},
 		// 进入产品购买须知
 		enterRules() {
 			this.$router.push({
 				path: './need',
 				query: {
-					proid: JSON.stringify(this.perMaster)
+					productInfo: JSON.stringify(this.productInfo)
 				}
 			})
 		},
 		//立即购买
 		buyNow() {
-			this.showClause = true
+			//是否启用条款
+			if (this.productInfo.IsEnableRule) {
+				this.showClause = true
+			} else {
+				this.payAction()
+			}
+		},
+		//付款操作
+		payAction() {
+			console.log('支付中')
 		},
 		//不同意条款
 		noPassClause() {
@@ -341,8 +402,9 @@ export default {
 			if (this.checked) {
 				this.$toast('同意条款，提交订单')
 				this.showClause = false
+				this.payAction()
 			} else {
-				this.$toast('请确认已仔细阅读条款内容')
+				this.$toast('请确认已熟知且同意条款内容')
 			}
 		}
 	}
