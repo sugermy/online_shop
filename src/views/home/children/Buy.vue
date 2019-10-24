@@ -467,7 +467,7 @@ export default {
 			}
 			let params = {
 				MerchantCode: this.$store.state.shopInfo.MerchantCode,
-				OpenId: this.$store.state.userInfo.openid,
+				OpenID: this.$store.state.userInfo.openid,
 				PlayDate: this.useOtherDate,
 				LinkName: this.chosePer[0].UserName,
 				LinkPhone: this.chosePer[0].UserPhone,

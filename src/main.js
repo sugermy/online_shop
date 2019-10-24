@@ -20,7 +20,7 @@ Vue.use(Lazyload, {})//懒加载组件---主要用在加载图片
 Vue.use(Swipe).use(SwipeItem);//轮播图组件
 Vue.use(SwipeCell);//滑动时删除
 Vue.use(Tab).use(Tabs);//tabs选项卡组件
-Vue.use(Dialog);//弹窗
+Vue.use(Dialog);//注册弹窗组件
 Vue.use(Popup);//页面弹出
 Vue.use(DatetimePicker);//时间选择器
 Vue.use(Stepper);//计数器
@@ -31,7 +31,7 @@ Vue.use(Field);//表单中的输入框组件
 Vue.use(Collapse).use(CollapseItem);//折叠面板
 Vue.use(Image);//图片
 Vue.prototype.$toast = Toast
-Vue.prototype.$dialog = Dialog
+Vue.prototype.$dialog = Dialog//原型扩展弹窗方法
 
 
 //设置vue在启动时是否生成生产提示
