@@ -40,6 +40,9 @@ export default class Ajax {
     return this._axios({ method: "get", url, params: { ...this._axios.defaults.params, ...params } });
   }
   post (url, params = {}, data = {}) {
+    let headers = {
+      'content-type': 'application/x-www-form-urlencoded'
+    }
     return this._axios({ method: "post", url, data, params: { ...this._axios.defaults.params, ...params } });
   }
 }

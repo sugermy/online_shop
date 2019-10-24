@@ -79,7 +79,6 @@ function getShop () {
     }
   })
 }
-
 //template
 function renderApp (router) {
   //router-title

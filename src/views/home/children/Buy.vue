@@ -480,6 +480,7 @@ export default {
 				SellPrice: this.sellPrice
 			}
 			console.log(params)
+			// this.creatOrder(params)
 		},
 		//不同意条款
 		noPassClause() {
@@ -495,6 +496,32 @@ export default {
 			} else {
 				this.$toast('请确认已熟知且同意条款内容')
 			}
+		},
+		//创建订单返回支付信息
+		creatOrder(params) {
+			this.$ajax.post('Home/Order_Submit', {}, { OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer) }).then(res => {
+				console.log(res)
+			})
+		},
+		//微信支付
+		weChatPay(params) {
+			console.log(params)
+			// {
+			//    "appId":"wx2421b1c4370ec43b",     //公众号名称，由商户传入
+			//    "timeStamp":"1395712654",         //时间戳，自1970年以来的秒数
+			//    "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串
+			//    "package":"prepay_id=u802345jgfjsdfgsdg888",
+			//    "signType":"MD5",         //微信签名方式：
+			//    "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名
+			// }
+			WeixinJSBridge.invoke('getBrandWCPayRequest', params, res => {
+				if (res.err_msg == 'get_brand_wcpay_request:ok') {
+					// 使用以上方式判断前端返回,微信团队郑重提示：
+					//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+				} else {
+					//用户取消支付或者支付失败返回
+				}
+			})
 		}
 	}
 }
