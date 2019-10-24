@@ -153,6 +153,7 @@
           border: 1px solid #333333;
           margin-right: 4px;
           position: relative;
+          text-align: center;
           .tourist-icon {
             position: absolute;
             bottom: -1px;
@@ -246,7 +247,7 @@
   }
 }
 .show-per {
-  height: 60vh;
+  height: 65vh;
   border-radius: 10px 10px 0 0;
   padding: 0 14px 14px;
   box-sizing: border-box;
@@ -268,6 +269,15 @@
       font-size: 16px;
       font-weight: 600;
       color: rgba(51, 51, 51, 1);
+    }
+    .per-txt {
+      font-size: 16px;
+      font-weight: bold;
+      color: rgba(51, 51, 51, 1);
+      .per-txt-portent {
+        color: #ff8a00;
+        margin: 0 2px;
+      }
     }
   }
   .per-main {
@@ -296,11 +306,13 @@
       height: calc(100% - 45px);
       overflow-y: auto;
       .per-item {
-        height: 50px;
         padding: 14px 0;
         border-bottom: 1px solid #e3e3e3;
         display: flex;
         align-items: center;
+        &:last-child {
+          border: none;
+        }
         .per-info {
           width: 80%;
           height: 100%;
@@ -331,7 +343,7 @@
   }
 }
 .edit-per {
-  height: 40vh !important;
+  height: 50vh !important;
   .van-cell {
     padding: 15px 16px;
   }
@@ -369,6 +381,9 @@
         top: 35%;
         left: 2.5%;
       }
+    }
+    /deep/.collapse-item {
+      white-space: pre-line;
     }
   }
   .clause-footer {

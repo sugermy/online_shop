@@ -26,9 +26,9 @@
         <div class="card-main">
           <img class="card-img" src="../../../assets/head_photo.png">
           <div class="card-info">
-            <p class="card-info-name">姓名：张满意</p>
-            <p>身份证号：412382199506047516</p>
-            <p>学生证：S147258963</p>
+            <p class="card-info-name">姓名：{{newInfo.UserName}}</p>
+            <p>身份证号：{{newInfo.UserIdCard}}</p>
+            <p>学生证：{{newInfo.CardNo}}</p>
           </div>
           <img @click.stop="share()" class="share-img" src="../../../assets/share.png">
         </div>
@@ -68,6 +68,7 @@ export default {
 			stepTwoImgNormal: require('../../../assets/circle_normal.png'),
 			stepTwoImgLink: require('../../../assets/circle_link.png'),
 			person: { name: '', phone: '', card: '', stuCard: '' },
+			postData: true,
 			errMsg: {
 				nameErr: false,
 				nameNo: '',
@@ -81,26 +82,18 @@ export default {
 			},
 			canvasWidth: window.innerWidth * 0.8,
 			// canvasHeight: (window.innerHeight - 49) * 0.75,
-			canvasHeight: 410,
+			canvasHeight: 390,
 			canvasMask: null,
 			canvasTarget: null,
-			timerOut: null
+			timerOut: null,
+			newInfo: {}
 		}
 	},
 	created() {},
-	mounted() {
-		// this.$nextTick(() => {
-		// 	this.initCanvas()
-		// })
-		let _this = this
-		setTimeout(function() {
-			_this.initCanvas()
-		}, 1000)
-	},
+	mounted() {},
 	methods: {
 		//第一步生成护照
 		creatCard() {
-			console.log(this.person)
 			//校验姓名
 			if (this.person.name == '') {
 				this.errMsg.nameErr = true
@@ -136,8 +129,33 @@ export default {
 			}
 
 			//学生证暂不做校验
-
-			this.step = 2
+			let params = {
+				MerchantCode: this.$store.state.shopInfo.MerchantCode,
+				OpenId: this.$store.state.userInfo.openid,
+				UserImgUrl: '',
+				Unionid: 'test001',
+				UserName: this.person.name,
+				UserPhone: this.person.phone,
+				UserIdCard: this.person.card,
+				CardNo: this.person.stuCard,
+				IDType: 2,
+				Gender: '',
+				Province: '',
+				Cicy: ''
+			}
+			if (this.postData) {
+				this.postData = false
+				this.$ajax.get('Home/Passport_SubmitInfo', { ReqStr: params }).then(res => {
+					this.postData = true
+					if (res.Code == 200) {
+						this.step = 2
+						this.newInfo = res.Data
+						this.initCanvas()
+					} else {
+						this.$toast(res.Content)
+					}
+				})
+			}
 		},
 		//第二步点击购买---返回首页产品列表
 		goBuy() {
@@ -186,16 +204,15 @@ export default {
 		drawTxt() {
 			this.canvasTarget.font = '16px Arial'
 			this.canvasTarget.fillStyle = '#333'
-			this.canvasTarget.fillText('张满意', 84, 55)
-			this.canvasTarget.fillText('411381199409054817', 84, 80)
+			this.canvasTarget.fillText(this.newInfo.UserName, 84, 55)
+			this.canvasTarget.fillText(this.newInfo.CardID, 84, 80)
 			this.canvasTarget.textAlign = 'center' //X取值设备宽度中间值  默认对齐居中
 			this.canvasTarget.font = '14px Arial'
 			this.canvasTarget.fillText('签发景区', this.canvasWidth / 2, 150)
-			this.canvasTarget.fillText('南岳衡山景区', this.canvasWidth / 2, 170)
-			this.canvasTarget.fillText('张满意', this.canvasWidth / 2, 190)
-			this.canvasTarget.fillText('411381199409054817', this.canvasWidth / 2, 210)
-			this.canvasTarget.fillText('河南 南阳', this.canvasWidth / 2, 230)
-			this.canvasTarget.fillText('2019-10-21 15:50:00', this.canvasWidth / 2, 250)
+			this.canvasTarget.fillText(this.$store.state.shopInfo.ShopName, this.canvasWidth / 2, 170)
+			this.canvasTarget.fillText(this.newInfo.UserName, this.canvasWidth / 2, 190)
+			this.canvasTarget.fillText(this.newInfo.UserIdCard, this.canvasWidth / 2, 210)
+			this.canvasTarget.fillText(this.newInfo.CreateTime, this.canvasWidth / 2, 230)
 		},
 		//填充二维码
 		drawCode() {

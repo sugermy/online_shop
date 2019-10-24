@@ -11,17 +11,17 @@
     </div>
     <div v-if="tourist.length>0" class="has-data">
       <van-swipe-cell v-for="(item,index) in tourist" :key="index" :ref="`swipeCell${index}`">
-        <div class="tourist-item" @click="enterDetail">
+        <div class="tourist-item" @click="enterDetail(item.CardID)">
           <img class="tourist-img" src="../../../assets/head_photo.png">
           <div class="tourist-info">
-            <p class="tourist-info-name">姓名：张满意</p>
-            <p>身份证号：412382199506047516</p>
-            <p>学生证：S147258963</p>
+            <p class="tourist-info-name">姓名：{{item.UserName}}</p>
+            <p>身份证号：{{item.UserIdCard}}</p>
+            <p>学生证：{{item.CardNo}}</p>
           </div>
           <img @click.stop="delItem(index)" class="del-img" src="../../../assets/del.png">
         </div>
         <template slot="right">
-          <van-button square color="#FE354A" stop-propagation @click="delData" text="删除" />
+          <van-button square color="#FE354A" stop-propagation @click="delData(item.ID)" text="删除" />
         </template>
       </van-swipe-cell>
       <div class="to-tourist" @click="creatAction">
@@ -49,20 +49,17 @@ export default {
 				this.tourist = res.Data
 			})
 		},
-		enterDetail() {
+		enterDetail(key) {
 			this.$router.push({
 				path: './detail',
 				query: {
-					id: 111
+					keycode: key
 				}
 			})
 		},
 		creatAction() {
 			this.$router.push({
-				path: './create',
-				query: {
-					id: 111
-				}
+				path: './create'
 			})
 		},
 		//点击按钮删除
@@ -71,8 +68,21 @@ export default {
 			this.$refs[`swipeCell${idx}`][0].open({ position: 'right' })
 		},
 		//滑动删除
-		delData() {
-			console.log('delete')
+		delData(id) {
+			console.log(id)
+			this.$dialog
+				.confirm({
+					title: '温馨提示',
+					message: '确认删除该旅游护照吗？'
+				})
+				.then(() => {
+					this.$ajax.get('Home/Passport_Delete', { ID: id }).then(res => {
+						this.getList()
+					})
+				})
+				.catch(() => {
+					// on cancel
+				})
 		}
 	}
 }

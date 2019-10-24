@@ -12,7 +12,6 @@ import './style/ui_reset.less'//基础UI框架重置样式
 // FastClick.attach(document.body);
 /*Vant*/
 import { PullRefresh, Cell, CellGroup, Overlay, Toast, Button, Lazyload, Swipe, SwipeItem, SwipeCell, Tab, Tabs, Dialog, Popup, DatetimePicker, Stepper, Checkbox, CheckboxGroup, RadioGroup, Radio, Field, Collapse, CollapseItem, Image } from 'vant';
-Vue.prototype.$toast = Toast
 Vue.use(PullRefresh);//下拉刷新
 Vue.use(Cell).use(CellGroup);//Cell 单元格
 Vue.use(Overlay);//遮罩
@@ -31,6 +30,9 @@ Vue.use(Radio);//单选插件
 Vue.use(Field);//表单中的输入框组件
 Vue.use(Collapse).use(CollapseItem);//折叠面板
 Vue.use(Image);//图片
+Vue.prototype.$toast = Toast
+Vue.prototype.$dialog = Dialog
+
 
 //设置vue在启动时是否生成生产提示
 Vue.config.productionTip = process.env.NODE_ENV === 'development'

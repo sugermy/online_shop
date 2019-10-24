@@ -13,7 +13,7 @@
       <div class="swiper">
         <van-swipe :autoplay="3000" :height="200" indicator-color="#FF6632">
           <van-swipe-item v-for="(item, index) in BannelList" :key="index">
-            <img class="swiper-img" :src="item.ImgUrl" v-lazy="item.ImgUrl" slot="default">
+            <img class="swiper-img" :src="item.ImgUrl" v-lazy="item.ImgUrl" slot="default" @click="targetUrl(item.LinkUrl)">
           </van-swipe-item>
         </van-swipe>
       </div>
@@ -21,7 +21,7 @@
 
       <!-- 主体产品区域s -->
       <div class="tabs">
-        <van-tabs v-model="active" background="#ecf2f6" title-active-color="#FF6632" :line-width="30" animated>
+        <van-tabs v-model="active" background="#ecf2f6" title-active-color="#FF6632" animated>
           <van-tab v-for="(item,index) in TypeList" :key="index" :title="item.TitleName">
             <div v-if="item.TitleType==2" class="pro-type">
               <div v-for="(el,key) in item.ProductList" :key="key" class="pro-itema" @click.stop="showDetail(item.TitleName,item.TitleType,el)">
@@ -154,6 +154,13 @@ export default {
 				this.enterNext(productId, type)
 			} else {
 				this.enterNext(productId, type)
+			}
+		},
+		//轮播点击跳转
+		targetUrl(url) {
+			console.log(url)
+			if (url != '') {
+				location.href = url
 			}
 		},
 		//购买跳转页面

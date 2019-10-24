@@ -38,8 +38,7 @@
           <p class="part-detail ellipsis">{{productInfo.ProductIntroduce}}</p>
           <div class="part-action">
             <span class="part-price">￥{{sellPrice}}</span>
-            <van-stepper button-size="20px" @change="changeNum" @plus="addNum" @minus="reduceNum" :min="productInfo.SellMin" :max="productInfo.SellMax" integer
-              v-model="setpValue" />
+            <van-stepper button-size="20px" disable-input @plus="addNum" @minus="reduceNum" :min="productInfo.SellMin" :max="productInfo.SellMax" integer v-model="setpValue" />
           </div>
         </div>
       </div>
@@ -62,17 +61,17 @@
       <h3 class="part-title">出行人信息</h3>
       <div class="tourist-action">
         <div class="tourist-list">
-          <div class="tourist-item" v-for="(item,index) in tourist" :key="index" @click="chooseItem(item)" :class="item.checked?'checked-item':''">{{item.name}}<i
+          <div class="tourist-item" v-for="(item,index) in tourist" :key="index" @click="chooseItem(item)" :class="item.checked?'checked-item':''">{{item.UserName}}<i
               v-show="item.checked" class="tourist-icon"></i></div>
         </div>
         <div class="tourist-modify" @click="openTourist">新增/编辑</div>
       </div>
       <div class="check-tourist">
         <div class="check-item" v-for="(item,index) in chosePer" :key="index">
-          <p class="i-name" v-show="item.name">{{item.name}}</p>
-          <p class="i-card i-txt" v-show="item.card">身份证号：{{item.card}}</p>
-          <p class="i-phone i-txt" v-show="item.phone">手机号：{{item.phone}}</p>
-          <i class="check-edit" @click="touristEdit(item.id,'直接编辑')"></i>
+          <p class="i-name" v-show="item.UserName">{{item.UserName}}</p>
+          <p class="i-card i-txt" v-show="item.UserIdCard">身份证号：{{item.UserIdCard}}</p>
+          <p class="i-phone i-txt" v-show="item.UserPhone">手机号：{{item.UserPhone}}</p>
+          <i class="check-edit" @click="touristEdit(item,true)"></i>
         </div>
       </div>
     </div>
@@ -95,22 +94,23 @@
     <van-popup v-model="showPer" class="show-per" round position="bottom">
       <header class="per-header">
         <div class="per-btn cancel" @click="showPer=false">取消</div>
+        <div class="per-txt">请至少选择<span class="per-txt-portent">{{perTxtTent}}</span>人</div>
         <div class="per-btn choose" @click="selectPre">确定</div>
       </header>
       <main class="per-main">
-        <div class="main-top">
+        <div class="main-top" @click="touristEdit({},false)">
           <i class="per-icon"></i>
           <span class="per-txt">添加出行人信息</span>
         </div>
         <div class="main-content">
           <div v-for="(item,index) in tourist" :key="index" class="per-item">
-            <van-checkbox v-model="item.checked" shape="square" checked-color="#FF9921" :ref="`newTourist${item.id}`" @click="changeNewStu($event,item)"></van-checkbox>
+            <van-checkbox v-model="item.checked" shape="square" checked-color="#FF9921" :ref="`newTourist${item.CardID}`" @click="changeNewStu($event,item)"></van-checkbox>
             <div class="per-info">
-              <p class="i-name" v-show="item.name">{{item.name}}</p>
-              <p class="i-card i-txt" v-show="item.card">身份证号：{{item.card}}</p>
-              <p class="i-phone i-txt" v-show="item.phone">手机号：{{item.phone}}</p>
+              <p class="i-name" v-show="item.UserName">{{item.UserName}}</p>
+              <p class="i-card i-txt" v-show="item.UserIdCard">身份证号：{{item.UserIdCard}}</p>
+              <p class="i-phone i-txt" v-show="item.UserPhone">手机号：{{item.UserPhone}}</p>
             </div>
-            <div class="per-edit" @click="touristEdit(item.id,'弹窗内编辑')"></div>
+            <div class="per-edit" @click="touristEdit(item,item.checked)"></div>
           </div>
         </div>
       </main>
@@ -122,13 +122,14 @@
       <header class="per-header">
         <div class="per-btn cancel" @click="showEdit=false">取消</div>
         <div class="title">编辑信息</div>
-        <div class="per-btn choose" @click="selectPre">确定</div>
+        <div class="per-btn choose" @click="editPre">确定</div>
       </header>
       <main class="per-main">
         <van-cell-group>
-          <van-field v-model="perMaster.name" label="姓名" placeholder="请输入姓名" />
-          <van-field v-model="perMaster.phone" type="tel" label="电话号码" placeholder="请输入电话号码" />
-          <van-field v-model="perMaster.idcard" type="tel" label="身份证号" placeholder="请输入身份证号" />
+          <van-field v-model="modifyTour.UserName" label="姓名" placeholder="请输入姓名" />
+          <van-field v-model="modifyTour.UserPhone" type="tel" label="电话号码" placeholder="请输入电话号码" />
+          <van-field v-model="modifyTour.UserIdCard" type="tel" label="身份证号" placeholder="请输入身份证号" />
+          <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" />
         </van-cell-group>
       </main>
     </van-popup>
@@ -144,19 +145,13 @@
       <div class="clause-collapse">
         <van-collapse v-model="activeNames">
           <van-collapse-item title="产品介绍" name="1" title-class="rules-title" :is-link="true">
-            <div class="collapse-item">
-              欲将沉醉换悲凉，清歌莫断肠。这混乱的尘世，究竟充斥了多少绝望和悲伤。你想去做一个勇敢的男子，为爱，为信仰，轰轰烈烈的奋斗一场。你周身充斥着无人可比的灵气和光芒。你有着与伟人比肩的才气和名声，你是那样高傲孤洁的男子。你的一寸狂心未说，已经几度黄昏雨'
-            </div>
+            <div class="collapse-item">{{productInfo.ProductIntroduce}}</div>
           </van-collapse-item>
           <van-collapse-item title="使用规则" name="2" title-class="rules-title" :is-link="true">
-            <div class="collapse-item">
-              欲将沉醉换悲凉，清歌莫断肠。这混乱的尘世，究竟充斥了多少绝望和悲伤。你想去做一个勇敢的男子，为爱，为信仰，轰轰烈烈的奋斗一场。你周身充斥着无人可比的灵气和光芒。你有着与伟人比肩的才气和名声，你是那样高傲孤洁的男子。你的一寸狂心未说，已经几度黄昏雨'
-            </div>
+            <div class="collapse-item">{{productInfo.UseIntroduce}}</div>
           </van-collapse-item>
           <van-collapse-item title="退票规则" name="3" title-class="rules-title" :is-link="true">
-            <div class="collapse-item">
-              一段情，反复的掂量，最后加深了岁月的绵长。一路追赶里，一路追忆里，最后得到的是什么，最后又失去的是什么。或许，只有我们在静思的时候才会明白，这路的追忆里，我们得到的快乐往往比痛苦要少。当相思成殇的时候，除了对月徒悲叹之外，什么也不曾抓到
-            </div>
+            <div class="collapse-item">{{productInfo.RefundIntroduce}}</div>
           </van-collapse-item>
         </van-collapse>
       </div>
@@ -179,27 +174,18 @@ export default {
 			showEdit: false,
 			showClause: false,
 			checked: false,
-			perMaster: { name: '', phone: '', idcard: '' },
 			currentDate: new Date(),
 			otherDate: '', //其他日期
+			useOtherDate: '',
 			otherPrice: '', //其他日期价格
 			minDate: new Date(), //时间选择器最小为当日
 			dayPrice: [{}, {}, {}], //日期价
 			sellPrice: null, //当日售卖价格
 			productInfo: {}, //产品信息
-			tourist: [
-				{ name: '小笼包', id: 1, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '小肉包', id: 2, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '王先生', id: 3, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '小素包', id: 4, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '韭菜包', id: 5, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '酸菜包', id: 6, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '鱼香肉丝包', id: 7, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '梅干菜包', id: 8, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '香菇包', id: 9, card: '411381199409054817', phone: '18520838663', checked: false },
-				{ name: '花卷', id: 10, card: '411381199409054817', phone: '18520838663', checked: false }
-			],
-			activeNames: ['1', '2', '3']
+			tourist: [],
+			modifyTour: {},
+			activeNames: ['1', '2', '3'],
+			perTxtTent: 1
 		}
 	},
 	created() {
@@ -213,7 +199,7 @@ export default {
 		},
 		//总价计算
 		totalMoney() {
-			return (this.sellPrice * this.setpValue).toFixed(2) //四舍五入---or取两位小数parseInt(this.sellPrice * this.setpValue*100)/100
+			return parseInt(this.sellPrice * this.setpValue * 100) / 100 //四舍五入---or取两位小数parseInt(this.sellPrice * this.setpValue*100)/100
 		}
 	},
 	methods: {
@@ -222,7 +208,12 @@ export default {
 			this.$load()
 			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId }).then(res => {
 				this.$close()
-				// this.tourist = res.Data.PassengerInfo
+				this.tourist = res.Data.PassengerInfo.map(el => {
+					return {
+						...el,
+						checked: false
+					}
+				})
 				this.productInfo = res.Data.ProductInfo
 				this.setpValue = res.Data.ProductInfo.SellMin
 				this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
@@ -230,6 +221,7 @@ export default {
 				})
 				this.sellPrice = this.dayPrice[0].SellPrice
 				this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
+				this.useOtherDate = this.dayPrice[0].DateStr
 				this.otherPrice = this.dayPrice[0].SellPrice
 			})
 		},
@@ -252,6 +244,7 @@ export default {
 				this.showDate = true
 			} else {
 				this.sellPrice = this.dayPrice[v].SellPrice
+				this.useOtherDate = this.dayPrice[v].DateStr
 			}
 		},
 		//确定日期选择
@@ -260,6 +253,7 @@ export default {
 			let date = v.format('yyyy-MM-dd')
 			this.$ajax.get('Home/Order_GetProductPrice', { ProductID: this.$route.query.productId, PlayDate: date }).then(res => {
 				this.otherDate = v.format('MM-dd')
+				this.useOtherDate = v.format('yyyy-MM-dd')
 				this.otherPrice = res.Data[0].SellPrice
 				this.sellPrice = res.Data[0].SellPrice
 			})
@@ -291,19 +285,15 @@ export default {
 				//先修改整体游客为false--再做循环添加checked
 				this.chosePer.forEach(el => {
 					this.tourist.forEach(kl => {
-						if (el.id == kl.id) {
+						if (el.CardID == kl.CardID) {
 							kl.checked = true
 						}
 					})
 				})
 			}
 		},
-		//输入框值改变
-		changeNum(v) {
-			// console.log(v)
-		},
 		//编辑游客
-		touristEdit(id) {
+		touristEdit(item, hasCheck) {
 			if (this.showPer) {
 				//在弹出层内部点击编辑
 				this.showPer = false
@@ -312,6 +302,8 @@ export default {
 				//外部直接编辑
 				this.showEdit = true
 			}
+			this.modifyTour = JSON.parse(JSON.stringify(item))
+			this.modifyTour.status = hasCheck
 		},
 		//快捷选中游客
 		chooseItem(item, sign) {
@@ -319,10 +311,12 @@ export default {
 			if (this.productInfo.PickTicket == 0) {
 				//为0 大票
 				if (item.checked) {
+					//取消
 					this.tourist.forEach(el => (el.checked = false))
 					item.checked = false
 					this.chosePer = [{}]
 				} else {
+					//选中
 					this.tourist.forEach(el => (el.checked = false))
 					item.checked = true
 					this.chosePer = [item]
@@ -333,7 +327,7 @@ export default {
 					//取消选中
 					item.checked = !item.checked
 					this.chosePer = this.chosePer.map(el => {
-						if (el.id == item.id) {
+						if (el.CardID === item.CardID) {
 							return {}
 						} else {
 							return el
@@ -345,14 +339,14 @@ export default {
 					if (checkedPer.length < this.setpValue) {
 						item.checked = !item.checked
 						let nouseIndex = this.chosePer.findIndex(val => {
-							return !val.name || val.name == ''
+							return !val.UserName || val.UserName == ''
 						})
 						this.chosePer[nouseIndex] = item
 					} else {
 						this.$toast('已达到最大出行人数')
 						if (sign) {
 							//阻止默认事件选中状态
-							this.$refs[`newTourist${item.id}`][0].toggle(false)
+							this.$refs[`newTourist${item.CardID}`][0].toggle(false)
 						}
 					}
 				}
@@ -369,6 +363,69 @@ export default {
 		//确定选中游客
 		selectPre() {
 			this.showPer = false
+		},
+		//编辑游客信息
+		editPre() {
+			if (!this.modifyTour.UserPhone || this.modifyTour.UserPhone == '') {
+				this.$toast('请输入电话号码')
+				return
+			} else if (!this.$checkPhone(this.modifyTour.UserPhone)) {
+				this.$toast('电话号码不正确')
+				return
+			}
+			if (!this.modifyTour.UserIdCard || this.modifyTour.UserIdCard == '') {
+				this.$toast('请输入身份证号')
+				return
+			} else if (!this.$checkCard(this.modifyTour.UserIdCard)) {
+				this.$toast('身份证号码不正确')
+				return
+			}
+			let params = {
+				MerchantCode: this.$store.state.shopInfo.MerchantCode,
+				OpenId: this.$store.state.userInfo.openid,
+				Unionid: 'test001',
+				UserName: this.modifyTour.UserName || '',
+				Phone: this.modifyTour.UserPhone || '',
+				IDNumber: this.modifyTour.UserIdCard || '',
+				CardID: this.modifyTour.CardID || '',
+				IDType: 2,
+				CardNo: this.modifyTour.CardNo || '',
+				IsAdd: this.modifyTour.CardID ? 2 : 1
+			}
+			this.$ajax.get('Home/Order_PassengerEdit', params).then(res => {
+				if (res.Code == 200) {
+					this.showEdit = false
+					if (this.modifyTour.CardID) {
+						this.tourist = this.tourist.map(el => {
+							if (el.CardID === res.Data.CardID) {
+								return { ...res.Data, checked: this.modifyTour.status }
+							} else {
+								return el
+							}
+						})
+						this.chosePer = this.chosePer.map(el => {
+							if (el.CardID === res.Data.CardID) {
+								return { ...res.Data, checked: this.modifyTour.status }
+							} else {
+								return el
+							}
+						})
+					} else {
+						this.tourist.push({
+							...res.Data,
+							checked: true
+						})
+						this.chosePer = [
+							{
+								...res.Data,
+								checked: true
+							}
+						]
+					}
+				} else {
+					this.$toast(res.Content)
+				}
+			})
 		},
 		// 进入产品购买须知
 		enterRules() {
@@ -390,7 +447,39 @@ export default {
 		},
 		//付款操作
 		payAction() {
-			console.log('支付中')
+			let uesLen = this.chosePer.length
+			let count = 0
+			this.chosePer.forEach(el => {
+				if (!el.UserName || el.UserName == '') {
+					count++
+				}
+			})
+			if (this.productInfo.PickTicket == 0) {
+				if (count != 0) {
+					this.$toast('请补全出行人信息')
+					return
+				}
+			} else {
+				if (uesLen < this.setpValue || count != 0) {
+					this.$toast('请补全出行人信息')
+					return
+				}
+			}
+			let params = {
+				MerchantCode: this.$store.state.shopInfo.MerchantCode,
+				OpenId: this.$store.state.userInfo.openid,
+				PlayDate: this.useOtherDate,
+				LinkName: this.chosePer[0].UserName,
+				LinkPhone: this.chosePer[0].UserPhone,
+				LinkIDNumber: this.chosePer[0].UserIdCard,
+				ProductID: this.$route.query.productId,
+				ProductName: this.productInfo.ProductName,
+				PickTicket: this.productInfo.PickTicket,
+				BuyCount: this.setpValue,
+				TicketPrice: this.productInfo.TicketPrice,
+				SellPrice: this.sellPrice
+			}
+			console.log(params)
 		},
 		//不同意条款
 		noPassClause() {
