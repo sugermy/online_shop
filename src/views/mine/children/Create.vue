@@ -16,8 +16,8 @@
     <div class="creat-main">
       <div v-show="step==1">
         <van-cell-group>
-          <van-field v-model="person.name" clearable label="姓名" placeholder="请输入您的姓名" :error-message="errMsg.nameErr?errMsg.nameRed:errMsg.nameNo" />
-          <van-field v-model="person.phone" type="tel" label="电话号码" placeholder="请输入您的11位手机号" :error-message="errMsg.phoneErr?errMsg.phoneRed:errMsg.phoneNo" />
+          <van-field v-model="person.name" clearable label="姓名" :maxlength="8" placeholder="请输入您的姓名" :error-message="errMsg.nameErr?errMsg.nameRed:errMsg.nameNo" />
+          <van-field v-model="person.phone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入您的11位手机号" :error-message="errMsg.phoneErr?errMsg.phoneRed:errMsg.phoneNo" />
           <van-field v-model="person.card" type="tel" label="身份证号" placeholder="请输入您的18位身份证号" :error-message="errMsg.cardErr?errMsg.cardRed:errMsg.cardNo" />
           <van-field v-model="person.stuCard" label="学生证" placeholder="请输入您的学生证" />
         </van-cell-group>

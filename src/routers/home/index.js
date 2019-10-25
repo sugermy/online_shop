@@ -1,12 +1,12 @@
 /*首页---路由*/
 
-import store from '../../vuex'
+import store from '@/vuex'
 //商城基本信息获取，设置属性
 
-const Home = () => import('../../views/home/index.vue');
-const View = () => import('../../views/home/children/View.vue');
-const Buy = () => import('../../views/home/children/Buy.vue');
-const Need = () => import('../../views/home/children/Need.vue');
+const Home = () => import('@/views/home/index.vue');
+const View = () => import('@/views/home/children/View.vue');
+const Buy = () => import('@/views/home/children/Buy.vue');
+const Need = () => import('@/views/home/children/Need.vue');
 
 
 const Homes = [

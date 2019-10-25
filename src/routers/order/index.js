@@ -1,9 +1,9 @@
 /*订单---路由*/
 
-const Order = () => import('../../views/order/index.vue');
-const View = () => import('../../views/order/children/View.vue');
-const Detail = () => import('../../views/order/children/Detail.vue');
-const Refund = () => import('../../views/order/children/Refund.vue');
+const Order = () => import('@/views/order/index.vue');
+const View = () => import('@/views/order/children/View.vue');
+const Detail = () => import('@/views/order/children/Detail.vue');
+const Refund = () => import('@/views/order/children/Refund.vue');
 
 
 const Orders = [

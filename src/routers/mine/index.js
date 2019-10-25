@@ -1,9 +1,9 @@
 /*我的---路由*/
 
-const Mine = () => import('../../views/mine/index.vue');
-const View = () => import('../../views/mine/children/View.vue');
-const Detail = () => import('../../views/mine/children/Detail.vue');
-const Create = () => import('../../views/mine/children/Create.vue');
+const Mine = () => import('@/views/mine/index.vue');
+const View = () => import('@/views/mine/children/View.vue');
+const Detail = () => import('@/views/mine/children/Detail.vue');
+const Create = () => import('@/views/mine/children/Create.vue');
 
 
 const Mines = [

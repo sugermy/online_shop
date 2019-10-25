@@ -1,4 +1,5 @@
 import axios from "axios";
+import qs from "qs";
 const baseURL = window.SYSTEM_CONFIG.webServer; //基础服务地址
 
 export default class Ajax {
@@ -41,8 +42,10 @@ export default class Ajax {
   }
   post (url, params = {}, data = {}) {
     let headers = {
-      'content-type': 'application/x-www-form-urlencoded'
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
     }
-    return this._axios({ method: "post", url, data, params: { ...this._axios.defaults.params, ...params } });
+    data = qs.stringify(data);
+
+    return this._axios({ method: "post", headers, url, params: { ...this._axios.defaults.params, ...params }, data });
   }
 }

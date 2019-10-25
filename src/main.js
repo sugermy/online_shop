@@ -36,9 +36,10 @@ Vue.prototype.$dialog = Dialog//原型扩展弹窗方法
 
 //设置vue在启动时是否生成生产提示
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
-let { checkCard, checkPhone } = checkFun //原型扩展  正则验证身份证
+let { checkCard, checkPhone, encryptCard } = checkFun //原型扩展  正则验证身份证
 Vue.prototype.$checkCard = checkCard
 Vue.prototype.$checkPhone = checkPhone
+Vue.prototype.$encryptCard = encryptCard
 
 /*router*/
 let allRouter = new Router({

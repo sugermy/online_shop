@@ -158,7 +158,6 @@ export default {
 		},
 		//轮播点击跳转
 		targetUrl(url) {
-			console.log(url)
 			if (url != '') {
 				location.href = url
 			}

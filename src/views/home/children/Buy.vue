@@ -71,7 +71,7 @@
           <p class="i-name" v-show="item.UserName">{{item.UserName}}</p>
           <p class="i-card i-txt" v-show="item.UserIdCard">身份证号：{{item.UserIdCard}}</p>
           <p class="i-phone i-txt" v-show="item.UserPhone">手机号：{{item.UserPhone}}</p>
-          <i class="check-edit" @click="touristEdit(item,true)"></i>
+          <i class="check-edit" @click="touristEdit(item,true,index,'out')"></i>
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@
         <div class="per-btn choose" @click="selectPre">确定</div>
       </header>
       <main class="per-main">
-        <div class="main-top" @click="touristEdit({},false)">
+        <div class="main-top" @click="touristEdit({},false,null,'insideNew')">
           <i class="per-icon"></i>
           <span class="per-txt">添加出行人信息</span>
         </div>
@@ -110,7 +110,7 @@
               <p class="i-card i-txt" v-show="item.UserIdCard">身份证号：{{item.UserIdCard}}</p>
               <p class="i-phone i-txt" v-show="item.UserPhone">手机号：{{item.UserPhone}}</p>
             </div>
-            <div class="per-edit" @click="touristEdit(item,item.checked)"></div>
+            <div class="per-edit" @click="touristEdit(item,item.checked,null,'inside')"></div>
           </div>
         </div>
       </main>
@@ -126,8 +126,8 @@
       </header>
       <main class="per-main">
         <van-cell-group>
-          <van-field v-model="modifyTour.UserName" label="姓名" placeholder="请输入姓名" />
-          <van-field v-model="modifyTour.UserPhone" type="tel" label="电话号码" placeholder="请输入电话号码" />
+          <van-field v-model="modifyTour.UserName" :maxlength="8" label="姓名" placeholder="请输入姓名" />
+          <van-field v-model="modifyTour.UserPhone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入电话号码" />
           <van-field v-model="modifyTour.UserIdCard" type="tel" label="身份证号" placeholder="请输入身份证号" />
           <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" />
         </van-cell-group>
@@ -185,7 +185,8 @@ export default {
 			tourist: [],
 			modifyTour: {},
 			activeNames: ['1', '2', '3'],
-			perTxtTent: 1
+			perTxtTent: 1,
+			editPosition: ''
 		}
 	},
 	created() {
@@ -293,7 +294,7 @@ export default {
 			}
 		},
 		//编辑游客
-		touristEdit(item, hasCheck) {
+		touristEdit(item, hasCheck, index, position) {
 			if (this.showPer) {
 				//在弹出层内部点击编辑
 				this.showPer = false
@@ -302,8 +303,10 @@ export default {
 				//外部直接编辑
 				this.showEdit = true
 			}
+			this.editPosition = position
 			this.modifyTour = JSON.parse(JSON.stringify(item))
 			this.modifyTour.status = hasCheck
+			this.modifyTour.idx = index
 		},
 		//快捷选中游客
 		chooseItem(item, sign) {
@@ -394,8 +397,14 @@ export default {
 			}
 			this.$ajax.get('Home/Order_PassengerEdit', params).then(res => {
 				if (res.Code == 200) {
-					this.showEdit = false
+					if (this.editPosition == 'insideNew') {
+						this.showEdit = false
+						this.showPer = true
+					} else {
+						this.showEdit = false
+					}
 					if (this.modifyTour.CardID) {
+						//CardID即为当前已有护照编辑
 						this.tourist = this.tourist.map(el => {
 							if (el.CardID === res.Data.CardID) {
 								return { ...res.Data, checked: this.modifyTour.status }
@@ -410,17 +419,22 @@ export default {
 								return el
 							}
 						})
-					} else {
+					} else if (this.modifyTour.idx != null && this.modifyTour.idx >= 0) {
+						//当前已添加的空白人员添加信息
 						this.tourist.push({
 							...res.Data,
 							checked: true
 						})
-						this.chosePer = [
-							{
-								...res.Data,
-								checked: true
-							}
-						]
+						this.chosePer[this.modifyTour.idx] = {
+							...res.Data,
+							checked: this.modifyTour.status
+						}
+					} else {
+						//全新创建
+						this.tourist.push({
+							...res.Data,
+							checked: false
+						})
 					}
 				} else {
 					this.$toast(res.Content)
@@ -480,7 +494,7 @@ export default {
 				SellPrice: this.sellPrice
 			}
 			console.log(params)
-			// this.creatOrder(params)
+			this.creatOrder(params)
 		},
 		//不同意条款
 		noPassClause() {
@@ -514,14 +528,6 @@ export default {
 			//    "signType":"MD5",         //微信签名方式：
 			//    "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名
 			// }
-			WeixinJSBridge.invoke('getBrandWCPayRequest', params, res => {
-				if (res.err_msg == 'get_brand_wcpay_request:ok') {
-					// 使用以上方式判断前端返回,微信团队郑重提示：
-					//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-				} else {
-					//用户取消支付或者支付失败返回
-				}
-			})
 		}
 	}
 }

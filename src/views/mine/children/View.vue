@@ -69,7 +69,6 @@ export default {
 		},
 		//滑动删除
 		delData(id) {
-			console.log(id)
 			this.$dialog
 				.confirm({
 					title: '温馨提示',

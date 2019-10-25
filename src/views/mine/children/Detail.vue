@@ -32,11 +32,12 @@ export default {
 	methods: {
 		getInfo() {
 			this.$ajax.get('Home/Passport_GetDetail', { KeyCode: this.$route.query.keycode }).then(res => {
-				console.log(res)
 				this.person = res.Data
 				this.person.Gender = '*'
 				this.person.Province = '*'
 				this.person.Cicy = '*'
+				this.person.UserPhone = this.$encryptCard('phone', this.person.UserPhone)
+				this.person.UserIdCard = this.$encryptCard('idcard', this.person.UserIdCard)
 			})
 		}
 	}

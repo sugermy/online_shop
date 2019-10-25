@@ -28,4 +28,12 @@ let checkPhone = function checkIdCard (phone) {
   return /^1(3|4|5|6|7|8|9)\d{9}$/.test(phone);
 }
 
-export { checkCard, checkPhone }
+let encryptCard = function (type, code) {
+  if (type == 'phone') {
+    return code.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+  } else if (type == 'idcard') {
+    return code.replace(/(\d{6})\d{8}(\d{4})/, '$1********$2');
+  }
+}
+
+export { checkCard, checkPhone, encryptCard }
