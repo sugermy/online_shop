@@ -1,18 +1,18 @@
 <template>
   <div class="mine">
-    <van-tabs v-model="active" animated>
-      <van-tab v-for="(item,index) in tabs" :key="index" :title="item" sticky :swipe-threshold="5" name="tab-item">
-        <div class="product-con">
+    <van-tabs v-model="active" animated @change="changTab">
+      <van-tab v-for="(item,index) in tabs" :name="index" :key="index" :title="item" sticky :swipe-threshold="5">
+        <div class="product-con" v-show="productlist.length>0">
           <div class="product-item" v-for="(item,index) in productlist" :key="index" @click="enterDetail(item.paytype)">
-            <h3 class="pro-orderno">订单号：1231231231456</h3>
+            <h3 class="pro-orderno">订单号：{{item.OrderNo}}</h3>
             <div class="pro-info">
-              <img class="pro-tourist" src="../../../assets/head_photo.png">
+              <img class="pro-tourist" :src="item.ProductImg">
               <div class="pro-detail">
-                <p class="pro-detail-username">小笼包</p>
-                <p class="pro-detail-proname">珠海长隆海洋王国成人票</p>
+                <p class="pro-detail-username">{{item.LinkName}}</p>
+                <p class="pro-detail-proname">{{item.ProductName}}</p>
                 <p class="pro-detail-num">
-                  <span class="num">数量：3</span>
-                  <span class="price">总价：￥238</span>
+                  <span class="num">数量：{{item.BuyCount}}</span>
+                  <span class="price">总价：￥{{item.PayAmount}}</span>
                 </p>
               </div>
             </div>
@@ -23,8 +23,12 @@
               <span v-if="item.paytype==2" class="status to-used">已使用</span>
               <span v-if="item.paytype==3" class="status to-refounded">查看详情</span>
             </div>
-            <img class="status-img" :src="require(`../../../assets/status${item.paytype}.png`)">
+            <img class="status-img" :src="require(`../../../assets/status${item.PayType}.png`)">
           </div>
+        </div>
+        <div class="product-nocon" v-show="productlist.length==0">
+          <img class="no-data-img" src="../../../assets/box.png">
+          <p class="no-data-info">暂无数据</p>
         </div>
       </van-tab>
     </van-tabs>
@@ -36,10 +40,22 @@ export default {
 		return {
 			active: 0,
 			tabs: ['全部', '未支付', '已支付', '已使用', '已退款'],
-			productlist: [{ paytype: 0 }, { paytype: 1 }, { paytype: 2 }, { paytype: 3 }, { paytype: 3 }, { paytype: 2 }, { paytype: 1 }, { paytype: 0 }]
+			productlist: []
 		}
 	},
+	created() {
+		this.getInfo(this.active)
+	},
 	methods: {
+		getInfo(type) {
+			this.$ajax.get('Home/Order_GetOrderList', { GetType: type }).then(res => {
+				console.log(res)
+				this.productlist = res.Data
+			})
+		},
+		changTab(name, title) {
+			this.getInfo(name)
+		},
 		//再次支付
 		payAgain() {
 			console.log(1)

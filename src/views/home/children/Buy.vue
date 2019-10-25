@@ -485,7 +485,7 @@ export default {
 				PlayDate: this.useOtherDate,
 				LinkName: this.chosePer[0].UserName,
 				LinkPhone: this.chosePer[0].UserPhone,
-				LinkIDNumber: this.chosePer[0].UserIdCard,
+				LinkIDNumber: this.chosePer[0].CardID, //后台接收护照号并非身份证号
 				ProductID: this.$route.query.productId,
 				ProductName: this.productInfo.ProductName,
 				PickTicket: this.productInfo.PickTicket,
