@@ -3,7 +3,7 @@
     <van-tabs v-model="active" animated @change="changTab">
       <van-tab v-for="(item,index) in tabs" :name="index" :key="index" :title="item" sticky :swipe-threshold="5">
         <div class="product-con" v-show="productlist.length>0">
-          <div class="product-item" v-for="(item,index) in productlist" :key="index" @click="enterDetail(item.paytype)">
+          <div class="product-item" v-for="(item,index) in productlist" :key="index" @click="enterDetail(item.OrderNo)">
             <h3 class="pro-orderno">订单号：{{item.OrderNo}}</h3>
             <div class="pro-info">
               <img class="pro-tourist" :src="item.ProductImg">
@@ -18,10 +18,10 @@
             </div>
             <div class="pro-footer">
               <span class="date">2019-04-01 13:00:00</span>
-              <span v-if="item.paytype==0" class="status to-pay" @click.stop="payAgain">支付</span>
-              <span v-if="item.paytype==1" class="status to-refound" @click.stop="refund">退款</span>
-              <span v-if="item.paytype==2" class="status to-used">已使用</span>
-              <span v-if="item.paytype==3" class="status to-refounded">查看详情</span>
+              <span v-if="item.PayType==0" class="status to-pay" @click.stop="payAgain(item.OrderNo)">支付</span>
+              <span v-if="item.PayType==1" class="status to-refound" @click.stop="refund(item.OrderNo)">退款</span>
+              <span v-if="item.PayType==2" class="status to-used">已使用</span>
+              <span v-if="item.PayType==3" class="status to-refounded">查看详情</span>
             </div>
             <img class="status-img" :src="require(`../../../assets/status${item.PayType}.png`)">
           </div>
@@ -47,12 +47,14 @@ export default {
 		this.getInfo(this.active)
 	},
 	methods: {
+		//获取列表信息
 		getInfo(type) {
 			this.$ajax.get('Home/Order_GetOrderList', { GetType: type }).then(res => {
 				console.log(res)
 				this.productlist = res.Data
 			})
 		},
+		//切换tabs
 		changTab(name, title) {
 			this.getInfo(name)
 		},
@@ -61,19 +63,19 @@ export default {
 			console.log(1)
 		},
 		//退款
-		refund() {
+		refund(OrderNo) {
 			this.$router.push({
 				path: './Refund',
 				query: {
-					id: 1
+					OrderNo
 				}
 			})
 		},
-		enterDetail() {
+		enterDetail(OrderNo) {
 			this.$router.push({
 				path: './detail',
 				query: {
-					id: 111
+					OrderNo
 				}
 			})
 		}
