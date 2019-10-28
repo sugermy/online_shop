@@ -41,6 +41,7 @@
               <div v-for="(el,key) in item.ProductList" :key="key" class="pro-itemb" @click.stop="showDetail(item.TitleName,item.TitleType,el)">
                 <div class="pro-info">
                   <p class="pro-name">{{el.ProductName}}</p>
+                  <p v-show="el.IsLimitAge" class="pro-year"><i class="year-icon"></i><span class="year-d">{{el.ShowLimitAge}}</span></p>
                   <p class="pro-detail">查看详情 ></p>
                 </div>
                 <div class="pro-buy">
@@ -168,7 +169,8 @@ export default {
 				path: './buy',
 				query: {
 					productId: productId,
-					hasImg: type
+					hasImg: type,
+					enterType: 0
 				}
 			})
 		}

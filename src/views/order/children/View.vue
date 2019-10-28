@@ -50,7 +50,6 @@ export default {
 		//获取列表信息
 		getInfo(type) {
 			this.$ajax.get('Home/Order_GetOrderList', { GetType: type }).then(res => {
-				console.log(res)
 				this.productlist = res.Data
 			})
 		},
@@ -71,6 +70,7 @@ export default {
 				}
 			})
 		},
+		//查看详情
 		enterDetail(OrderNo) {
 			this.$router.push({
 				path: './detail',

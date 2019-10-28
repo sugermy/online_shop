@@ -207,7 +207,7 @@ export default {
 		//获取产品详情
 		getProduct() {
 			this.$load()
-			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId }).then(res => {
+			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId, enterType: this.$route.query.enterType }).then(res => {
 				this.$close()
 				this.tourist = res.Data.PassengerInfo.map(el => {
 					return {
@@ -494,7 +494,8 @@ export default {
 				SellPrice: this.sellPrice
 			}
 			console.log(params)
-			this.creatOrder(params)
+			// this.creatOrder(params)
+			this.weChatPay()
 		},
 		//不同意条款
 		noPassClause() {
@@ -513,21 +514,37 @@ export default {
 		},
 		//创建订单返回支付信息
 		creatOrder(params) {
+			this.$load()
 			this.$ajax.post('Home/Order_Submit', {}, { OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer) }).then(res => {
-				console.log(res)
+				// this.weChatPay(res.Data)
+				this.$close()
 			})
 		},
 		//微信支付
 		weChatPay(params) {
-			console.log(params)
-			// {
-			//    "appId":"wx2421b1c4370ec43b",     //公众号名称，由商户传入
-			//    "timeStamp":"1395712654",         //时间戳，自1970年以来的秒数
-			//    "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串
-			//    "package":"prepay_id=u802345jgfjsdfgsdg888",
-			//    "signType":"MD5",         //微信签名方式：
-			//    "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名
-			// }
+			// console.log(params)
+			console.log(WeixinJSBridge)
+			WeixinJSBridge.invoke(
+				'getBrandWCPayRequest',
+				{
+					appId: 'wx2421b1c4370ec43b', //公众号名称，由商户传入
+					timeStamp: '1395712654', //时间戳，自1970年以来的秒数
+					nonceStr: 'e61463f8efa94090b1f366cccfbbb444', //随机串
+					package: 'prepay_id=u802345jgfjsdfgsdg888',
+					signType: 'MD5', //微信签名方式：
+					paySign: '70EA570631E4BB79628FBCA90534C63FF7FADD89' //微信签名
+				},
+				res => {
+					if (res.err_msg == 'get_brand_wcpay_request:ok') {
+						// 使用以上方式判断前端返回,微信团队郑重提示：
+						//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+					} else {
+						this.$router.push({
+							path: '/order'
+						})
+					}
+				}
+			)
 		}
 	}
 }

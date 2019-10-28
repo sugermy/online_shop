@@ -2,26 +2,26 @@
   <van-swipe :autoplay="0" class="swiper-list" :loop="false" indicator-color="#FF9921">
     <van-swipe-item v-for="(item,index) in ticketlist" :key="index">
       <div class="swiper-header">
-        <img class="header-img" src="../assets/head_photo.png">
+        <img class="header-img" src="../assets/head_photo.jpg">
         <div class="header-info">
-          <p class="header-info-name">姓名：张满意</p>
-          <p>身份证号：412382199506047516</p>
-          <p>学生证：S147258963</p>
+          <p class="header-info-name">姓名：{{item.LinkName}}</p>
+          <p>身份证号：{{item.LinkIDNumber}}</p>
+          <p>学生证：{{item.CardNo&&item.CardNo!='undefined'?item.CardNo:''}}</p>
         </div>
       </div>
       <div class="swiper-main">
         <div class="main-qrcode" :id="(tickettype+index)" ref="qrcode"></div>
-        <p class="main-codeno">凭证码：<span>2313820280190728</span></p>
-        <p class="main-name">车索【全程票】</p>
+        <p class="main-codeno">凭证码：<span>{{item.Ecode}}</span></p>
+        <p class="main-name">{{productinfo.ProductName}}</p>
         <p class="main-orderno-price">
-          <span>订单号：23219100367165981663</span>
-          <span class="price">￥78</span>
+          <span>订单号：{{productinfo.OrderNo}}</span>
+          <span class="price">￥{{productinfo.Amount}}</span>
         </p>
         <p class="main-used-num">
-          <span>总数量：1</span>
-          <span>使用数量：0</span>
+          <span>总数量：{{item.CodeQty}}</span>
+          <span>使用数量：{{item.UseCount}}</span>
         </p>
-        <p class="main-date">有效期：2019.10.10-2019.10.11</p>
+        <p class="main-date">有效期：{{item.EffectiveDateStr}}</p>
       </div>
     </van-swipe-item>
   </van-swipe>
@@ -31,25 +31,26 @@ import QRCode from 'qrcodejs2' //引入二维码插件
 
 export default {
 	props: {
+		productinfo: Object,
 		ticketlist: Array, //订单票
 		tickettype: String //方便使用refs获取实例
 	},
 	data() {
 		return {}
 	},
-	mounted() {
+	created() {
 		this.$nextTick(() => {
 			this.ticketlist.forEach((el, key) => {
-				this.creatQrCode(this.tickettype + key)
+				this.creatQrCode(this.tickettype + key, el.EnEcode)
 			})
 		})
 	},
 	methods: {
-		creatQrCode(name) {
+		creatQrCode(name, EnEcode) {
 			let qrcode = new QRCode(name, {
 				width: 150,
 				height: 150,
-				text: 'code',
+				text: EnEcode,
 				colorDark: '#000',
 				colorLight: '#fff'
 			})
@@ -69,6 +70,7 @@ export default {
 		width: 64px;
 		height: 64px;
 		margin: 0 18px 0 24px;
+		border-radius: 50%;
 	}
 	.header-info {
 		font-size: 14px;
