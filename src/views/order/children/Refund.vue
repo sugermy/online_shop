@@ -44,7 +44,7 @@ export default {
 					checked: false
 				}
 			],
-			radio: null,
+			radio: 1,
 			value: ''
 		}
 	},
