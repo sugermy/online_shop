@@ -67,6 +67,7 @@ function redirurl () {
 function getUser (code) {
   store.dispatch('getUserInfo', code).then(() => {
     let newAjax = new Ajax(store.state.userInfo.openid, window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
+    // let newAjax = new Ajax('', window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
     Vue.prototype.$ajax = newAjax
     getShop()
   })
