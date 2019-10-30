@@ -6,10 +6,12 @@ export default {
       merAjax.get('Home/GetOpenID_H5', {}).then(res => {
         if (res.Code == 200) {
           commit('setRedirectUrl', res.Data)
+          resolve()
         } else {
+          alert('调用失败')
           commit('setRedirectUrl', '')
+          resolve()
         }
-        resolve()
       })
     })
   },
@@ -19,12 +21,12 @@ export default {
     return new Promise((resolve, reject) => {
       merAjax.get('Home/GetUserInfo_H5', { code: data }).then(res => {
         if (res.Code == 200) {
-          commit('setUserInfo', JSON.parse(res.Data))
-          resolve()
+          let master = JSON.parse(res.Data).Data
+          commit('setUserInfo', master)
         } else {
           commit('setUserInfo', {})
-          resolve()
         }
+        resolve()
       })
     })
   },

@@ -186,7 +186,8 @@ export default {
 			modifyTour: {},
 			activeNames: ['1', '2', '3'],
 			perTxtTent: 1,
-			editPosition: ''
+			editPosition: '',
+			OrderNo: ''
 		}
 	},
 	created() {
@@ -220,6 +221,18 @@ export default {
 				this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
 					return index <= 2
 				})
+
+				if (this.productInfo.PickTicket == 0) {
+					//为0 大票
+				} else {
+					//为1 一人一票
+					this.chosePer = []
+					let len = this.productInfo.SellMin
+					for (let i = 0; i < len; i++) {
+						this.chosePer.push({})
+					}
+				}
+
 				this.sellPrice = this.dayPrice[0].SellPrice
 				this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
 				this.useOtherDate = this.dayPrice[0].DateStr
@@ -493,9 +506,7 @@ export default {
 				TicketPrice: this.productInfo.TicketPrice,
 				SellPrice: this.sellPrice
 			}
-			console.log(params)
-			// this.creatOrder(params)
-			this.weChatPay()
+			this.creatOrder(params)
 		},
 		//不同意条款
 		noPassClause() {
@@ -516,35 +527,32 @@ export default {
 		creatOrder(params) {
 			this.$load()
 			this.$ajax.post('Home/Order_Submit', {}, { OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer) }).then(res => {
-				// this.weChatPay(res.Data)
+				this.weChatPay(res.Data.PayData)
+				this.OrderNo = res.Data.OrderNo
 				this.$close()
 			})
 		},
 		//微信支付
 		weChatPay(params) {
-			// console.log(params)
-			console.log(WeixinJSBridge)
-			WeixinJSBridge.invoke(
-				'getBrandWCPayRequest',
-				{
-					appId: 'wx2421b1c4370ec43b', //公众号名称，由商户传入
-					timeStamp: '1395712654', //时间戳，自1970年以来的秒数
-					nonceStr: 'e61463f8efa94090b1f366cccfbbb444', //随机串
-					package: 'prepay_id=u802345jgfjsdfgsdg888',
-					signType: 'MD5', //微信签名方式：
-					paySign: '70EA570631E4BB79628FBCA90534C63FF7FADD89' //微信签名
-				},
-				res => {
-					if (res.err_msg == 'get_brand_wcpay_request:ok') {
-						// 使用以上方式判断前端返回,微信团队郑重提示：
-						//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-					} else {
-						this.$router.push({
-							path: '/order'
-						})
-					}
+			let data = JSON.parse(params)
+			WeixinJSBridge.invoke('getBrandWCPayRequest', data, res => {
+				if (res.err_msg == 'get_brand_wcpay_request:ok') {
+					// 使用以上方式判断前端返回,微信团队郑重提示：
+					//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+					this.$router.push({
+						path: '/order'
+					})
+					this.toServrPay()
+				} else {
+					this.$router.push({
+						path: '/order'
+					})
 				}
-			)
+			})
+		},
+		//支付成功调用方法
+		toServrPay() {
+			this.$ajax.post('Home/Order_PaySuccessUpdate', { OrderNo: this.OrderNo, Status: 'SUCCESS' }).then(res => {})
 		}
 	}
 }

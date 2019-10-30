@@ -1,11 +1,20 @@
 <template>
   <div class="box">
-    <div class="header-step">
-      <div class="step-item" v-for="(item,index) in steps" :key="index">
-        <p class="step-num" :class="stepLink==index?'step-txt-link':''">{{index}}</p>
-        <p class="step-name">{{item.name}}</p>
-        <span v-if="index<3" class="step-line" :class="stepLink==index?'step-line-link':''"></span>
+    <div class="star">
+      <h3 class="title">星级评价</h3>
+      <div class="star-list content">
+        <div class="star-item" v-for="(item,index) in starList" :key="index">
+          <span class="star-name">{{item.name}}：</span>
+          <div class="star-score">
+            <img class="star-score-img" v-for="(star,key) in 5" :key="key" :src="key<=starTotal[item.type]?itemImgUrlLink:itemImgUrlNormal" @click="handelStar(key,item.type)">
+            <span class="star-score-txt">{{item.type=='starTime'?timeStar:(item.type=='starServe'?serveStar:majorStar)}}分</span>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="describe">
+      <h3 class="title">评价描述</h3>
+      <textarea class="content" name="" cols="30" rows="3"></textarea>
     </div>
   </div>
 </template>
@@ -13,43 +22,64 @@
 export default {
 	data() {
 		return {
-			stepLink: 0,
-			steps: [{ name: '我要报案' }, { name: '领款账号' }, { name: '材料上传' }]
+			starTotal: {
+				starTime: 5,
+				starServe: 5,
+				starMajor: 5
+			},
+			starList: [{ name: '理赔时效', type: 'starTime' }, { name: '服务态度', type: 'starServe' }, { name: '专业态度', type: 'starMajor' }],
+			itemImgUrlLink: require('@/assets/module_link.png'),
+			itemImgUrlNormal: require('@/assets/module.png')
+		}
+	},
+	computed: {
+		timeStar() {
+			return 2 * this.starTotal.starTime
+		},
+		serveStar() {
+			return 2 * this.starTotal.starServe
+		},
+		majorStar() {
+			return 2 * this.starTotal.starMajor
+		}
+	},
+	methods: {
+		handelStar(idx, type) {
+			this.starTotal[type] = idx + 1
 		}
 	}
 }
 </script>
 <style lang="less" scoped>
-.header-step {
-	height: 60px;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	.step-item {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		.step-txt-link {
-			background: red;
-		}
-		.step-line-link {
-			border-color: red;
-		}
-		.step-num {
-			width: 30px;
-			height: 30px;
-			border-radius: 50%;
-			background: #ccc;
-			color: #fff;
-		}
-		.step-line {
-			position: absolute;
-			width: 20%;
-			height: 1px;
-			background: transparent;
-			border-bottom: 1px dashed #ccc;
+.box {
+	.title {
+		font-size: 14px;
+		color: #333;
+		font-weight: bold;
+	}
+	.content {
+		margin-top: 10px;
+	}
+	.star-list {
+		.star-item {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			.star-name {
+				color: #999;
+				margin-right: 10px;
+			}
+			.star-score {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				.star-score-img {
+					margin-right: 10px;
+				}
+				.star-score-txt {
+					margin-left: 10px;
+				}
+			}
 		}
 	}
 }

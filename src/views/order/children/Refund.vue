@@ -14,7 +14,7 @@
       </van-cell-group>
     </div>
     <div class="refund-footer">
-      <p class="refund-btn">确认提交</p>
+      <p class="refund-btn" @click="refundSubmit">确认提交</p>
     </div>
   </div>
 </template>
@@ -29,12 +29,12 @@ export default {
 					checked: false
 				},
 				{
-					txt: '行程有变化',
+					txt: '与实际情况不符',
 					id: 2,
 					checked: false
 				},
 				{
-					txt: '体验不好',
+					txt: '7天无理由退货',
 					id: 3,
 					checked: false
 				},
@@ -51,6 +51,26 @@ export default {
 	methods: {
 		checkItem(id) {
 			this.radio = id
+		},
+		refundSubmit() {
+			if (this.radio == 4 && this.value == '') {
+				this.$toast('请输入退款原因')
+				return
+			}
+			this.$load()
+			let Remark = this.radio != 4 ? this.refundReason[this.radio - 1].txt : this.value
+			this.$ajax.get('Home/Order_Refund', { OrderNo: this.$route.query.OrderNo, Remark }).then(res => {
+				this.$close()
+				this.$toast({
+					message: res.Content,
+					duration: 2000,
+					onClose: () => {
+						this.$router.push({
+							path: '/order'
+						})
+					}
+				})
+			})
 		}
 	}
 }

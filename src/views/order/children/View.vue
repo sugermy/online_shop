@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="pro-footer">
-              <span class="date">2019-04-01 13:00:00</span>
+              <span class="date">{{item.CreateTime}}</span>
               <span v-if="item.PayType==0" class="status to-pay" @click.stop="payAgain(item.OrderNo)">支付</span>
               <span v-if="item.PayType==1" class="status to-refound" @click.stop="refund(item.OrderNo)">退款</span>
               <span v-if="item.PayType==2" class="status to-used">已使用</span>
@@ -58,8 +58,26 @@ export default {
 			this.getInfo(name)
 		},
 		//再次支付
-		payAgain() {
-			console.log(1)
+		payAgain(OrderNo) {
+			this.$load()
+			this.$ajax.get('Home/Order_RePay', { OrderNo }).then(res => {
+				this.$close()
+				let resJson = JSON.parse(res.Data)
+				WeixinJSBridge.invoke('getBrandWCPayRequest', resJson, data => {
+					if (data.err_msg == 'get_brand_wcpay_request:ok') {
+						// 使用以上方式判断前端返回,微信团队郑重提示：
+						//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+						this.toServrPay(OrderNo)
+						this.getInfo(this.active)
+					} else {
+						this.getInfo(this.active)
+					}
+				})
+			})
+		},
+		//支付成功调用方法
+		toServrPay() {
+			this.$ajax.post('Home/Order_PaySuccessUpdate', { OrderNo: this.OrderNo, Status: 'SUCCESS' }).then(res => {})
 		},
 		//退款
 		refund(OrderNo) {

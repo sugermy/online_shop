@@ -2,6 +2,7 @@
 module.exports = {
   devServer: {
     port: 9527,
+    disableHostCheck: true,
     // open: true
     // proxy: {
     //   '/api': {

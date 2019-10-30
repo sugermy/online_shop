@@ -113,6 +113,7 @@ export default {
 	created() {
 		this.getHomeData()
 		this.userName = this.$store.state.userInfo.nickname
+		this.headPhoto = this.$store.state.userInfo.headimgurl
 	},
 	mounted() {},
 	//缓存组件生命周期
