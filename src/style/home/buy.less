@@ -19,9 +19,39 @@
       font-family: PingFangSC-Medium, PingFangSC;
       font-weight: 500;
       color: rgba(51, 51, 51, 1);
+      .part-title-tip {
+        font-size: 10px;
+        margin-left: 4px;
+        color: #a2a2a2;
+        .tip-num {
+          color: orange;
+        }
+      }
     }
     .part-main {
       width: 100%;
+    }
+  }
+  @media (min-width: 240px) and (max-width: 320px) {
+    .part-title {
+      font-size: 12px !important;
+      .part-title-tip {
+        font-size: 9px !important;
+      }
+    }
+    .part-year {
+      font-size: 9px !important;
+    }
+  }
+  @media (min-width: 321px) and (max-width: 360px) {
+    .part-title {
+      font-size: 14px !important;
+      .part-title-tip {
+        font-size: 10px !important;
+      }
+    }
+    .part-year {
+      font-size: 10px !important;
     }
   }
   .part-date {
@@ -41,11 +71,18 @@
         font-size: 12px;
         line-height: 20px;
         padding: 5px 0;
+        p {
+          font-weight: bold;
+          color: #333;
+        }
       }
       .pick-date {
         border-color: #ff9921;
         color: #ff9921;
         position: relative;
+        p {
+          color: #ff9921;
+        }
         .pick-icon {
           position: absolute;
           bottom: -1px;
@@ -63,16 +100,31 @@
       display: flex;
       margin-top: 14px;
       .part-img {
-        width: 120px;
-        height: 86px;
+        width: 110px;
+        height: 110px;
         margin-right: 10px;
+        border-radius: 6px;
       }
       .part-info {
-        width: 100%;
+        // width: 100%;
+        width: calc(100% - 130px);
         .part-name {
           font-weight: 600;
           color: #333333;
           line-height: 20px;
+        }
+        .part-year {
+          margin-top: 8px;
+          font-size: 10px;
+          display: flex;
+          align-items: center;
+          .rules-icon {
+            width: 10px;
+            height: 10px;
+            background: url("../../assets/year_info.png") no-repeat;
+            background-size: 100%;
+            margin-right: 4px;
+          }
         }
         .part-detail {
           height: 12px;
@@ -83,14 +135,27 @@
         }
         .part-action {
           display: flex;
-          height: 30px;
           justify-content: space-between;
           align-items: center;
+          position: relative;
           .part-price {
             font-size: 16px;
             font-weight: bold;
             color: rgba(254, 53, 74, 1);
           }
+          .part-rules-enter {
+            margin-top: 4px;
+            color: #999;
+          }
+          .part-action-right {
+            position: absolute;
+            right: 0%;
+            bottom: 0%;
+          }
+        }
+        .part-rules-enter {
+          font-size: 12px;
+          line-height: 18px;
         }
       }
       .has-img {
@@ -232,6 +297,10 @@
         font-size: 18px;
         font-weight: 600;
         color: rgba(254, 53, 74, 1);
+      }
+      .pay-priceother {
+        font-size: 12px;
+        color: #959dc6;
       }
     }
     .pay-action {

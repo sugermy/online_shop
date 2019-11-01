@@ -21,7 +21,7 @@
 
       <!-- 主体产品区域s -->
       <div class="tabs">
-        <van-tabs v-model="active" background="#ecf2f6" title-active-color="#FF6632" animated>
+        <van-tabs v-model="active" background="#ecf2f6" line-height="2px" title-active-color="#FF6632" animated>
           <van-tab v-for="(item,index) in TypeList" :key="index" :title="item.TitleName">
             <div v-if="item.TitleType==2" class="pro-type">
               <div v-for="(el,key) in item.ProductList" :key="key" class="pro-itema" @click.stop="showDetail(item.TitleName,item.TitleType,el)">
@@ -170,7 +170,7 @@ export default {
 				path: './buy',
 				query: {
 					productId: productId,
-					hasImg: type,
+					// hasImg: type,
 					isProduct: 0
 				}
 			})

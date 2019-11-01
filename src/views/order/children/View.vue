@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="pro-footer">
-              <span class="date">{{item.CreateTime}}</span>
+              <span class="date">时间：{{item.CreateTime}}</span>
               <span v-if="item.PayType==0" class="status to-pay" @click.stop="payAgain(item.OrderNo)">支付</span>
               <span v-if="item.PayType==1" class="status to-refound" @click.stop="refund(item.OrderNo)">退款</span>
               <span v-if="item.PayType==2" class="status to-used">已使用</span>

@@ -48,19 +48,25 @@ let allRouter = new Router({
 })
 Vue.use(Router)
 
+let enterHref = JSON.parse(JSON.stringify(location.href))
 //根据code换取当前登陆用户的个人信息
 let code = getQuery('code');
 if (code && code != '') {
   getUser(code)
 } else {//缺省页地址栏无code 说明暂无授权
-  store.dispatch('getRedirectUrl').then(() => {
-    redirurl()
-  })
-  // getUser('manyiTest')
+  // store.dispatch('getRedirectUrl').then(() => {
+  //   redirurl()
+  // })
+  getUser('manyiTest')
 }
 //地址重定向
 function redirurl () {
-  location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl + '/'
+  let isProduct = getQuery('isProduct');
+  if (isProduct && isProduct != 0) {
+    location.href = store.state.redirectUrl + enterHref
+  } else {
+    location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl + '/'
+  }
 }
 
 //登陆

@@ -14,7 +14,7 @@
         <div class="tourist-item" @click="enterDetail(item.CardID)">
           <img class="tourist-img" src="../../../assets/head_photo.jpg">
           <div class="tourist-info">
-            <p class="tourist-info-name">姓名：{{item.UserName}}</p>
+            <p class="tourist-info-name">{{item.UserName}}</p>
             <p>身份证号：{{item.UserIdCard}}</p>
             <p v-show="item.CardNo!=''">学生证：{{item.CardNo}}</p>
           </div>
@@ -28,7 +28,7 @@
         <i class="tourist-icon"></i>
         <span class="tourist-txt">创建旅游护照</span>
       </div>
-      <p class="to-tourist-remark">注：可创建多个护照</p>
+      <p class="to-tourist-remark">注：可创建多个旅游护照</p>
     </div>
   </div>
 </template>

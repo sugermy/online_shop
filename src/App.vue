@@ -48,7 +48,7 @@ export default {
 		background: #ecf2f6;
 		overflow-y: auto;
 		overflow-x: hidden;
-		padding: 0 14px;
+		padding: 0 2.5%;
 		box-sizing: border-box;
 	}
 }

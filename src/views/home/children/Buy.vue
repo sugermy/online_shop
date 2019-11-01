@@ -32,17 +32,27 @@
     <div class="buy-part part-info">
       <h3 class="part-title">产品信息</h3>
       <div class="part-main">
-        <img class="part-img" :src="productInfo.ProductImg" v-if="$route.query.hasImg==2">
-        <div class="part-info" :class="$route.query.hasImg==2?'has-img':''">
+        <!-- <img class="part-img" :src="productInfo.ProductImg" v-if="$route.query.hasImg==2"> -->
+        <img class="part-img" :src="productInfo.ProductImg">
+        <!-- <div class="part-info" :class="$route.query.hasImg==2?'has-img':''"> -->
+        <div class="part-info">
           <p class="part-name">{{productInfo.ProductName}}</p>
+          <p class="part-year" v-if="productInfo.IsLimitAge"><i class="rules-icon"></i>适用人群：{{productInfo.ShowLimitAge}}</p>
           <p class="part-detail ellipsis">{{productInfo.ProductIntroduce}}</p>
           <div class="part-action">
-            <span class="part-price">￥{{sellPrice}}</span>
-            <van-stepper button-size="20px" disable-input @plus="addNum" @minus="reduceNum" :min="productInfo.SellMin" :max="productInfo.SellMax" integer v-model="setpValue" />
+            <div class="part-action-left">
+              <span class="part-price">￥{{sellPrice}}</span>
+              <div class="part-rules-enter" @click="enterRules">
+                关于产品 >
+              </div>
+            </div>
+            <van-stepper class="part-action-right" button-size="20px" disable-input @plus="addNum" @minus="reduceNum" :min="productInfo.SellMin" :max="productInfo.SellMax" integer
+              v-model="setpValue" />
           </div>
+
         </div>
       </div>
-      <div class="part-rules">
+      <!-- <div class="part-rules">
         <div class="part-rules-list">
           <i class="rules-icon"></i>
           <span>{{productInfo.ProductType}}</span>
@@ -52,13 +62,13 @@
         <div class="part-rules-enter" @click="enterRules">
           购买须知 >
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- 产品操作e -->
 
     <!-- 游客绑定出行人s -->
     <div class="buy-part part-tourist">
-      <h3 class="part-title">出行人信息</h3>
+      <h3 class="part-title">出行人信息<span class="part-title-tip">需填写<i class="tip-num">{{touristNum}}个</i>出行人(切换出行人需先取消已选中出行人)</span></h3>
       <div class="tourist-action">
         <div class="tourist-list">
           <div class="tourist-item" v-for="(item,index) in tourist" :key="index" @click="chooseItem(item)" :class="item.checked?'checked-item':''">{{item.UserName}}<i
@@ -78,8 +88,8 @@
     <!-- 游客绑定出行人e -->
     <div class="buy-pay">
       <div class="pay-total">
-        <i>合计：</i>
         <span class="pay-price">￥{{totalMoney}}</span>
+        <span class="pay-priceother">（已优惠：{{discountsMoney}}元）</span>
       </div>
       <div class="pay-action" @click="buyNow">立即购买</div>
     </div>
@@ -181,6 +191,7 @@ export default {
 			minDate: new Date(), //时间选择器最小为当日
 			dayPrice: [{}, {}, {}], //日期价
 			sellPrice: null, //当日售卖价格
+			discountsPrice: null, //当前优惠价格
 			productInfo: {}, //产品信息
 			tourist: [],
 			modifyTour: {},
@@ -188,6 +199,7 @@ export default {
 			perTxtTent: 1,
 			editPosition: '',
 			OrderNo: ''
+			// touristNum: 1
 		}
 	},
 	created() {
@@ -202,6 +214,17 @@ export default {
 		//总价计算
 		totalMoney() {
 			return parseInt(this.sellPrice * this.setpValue * 100) / 100 //四舍五入---or取两位小数parseInt(this.sellPrice * this.setpValue*100)/100
+		},
+		//优惠
+		discountsMoney() {
+			return parseInt(this.discountsPrice * this.setpValue * 100) / 100 //四舍五入---or取两位小数parseInt(this.discountsPrice * this.setpValue*100)/100
+		},
+		touristNum() {
+			if (this.productInfo.PickTicket == 0) {
+				return 1
+			} else {
+				return this.setpValue
+			}
 		}
 	},
 	methods: {
@@ -232,8 +255,8 @@ export default {
 						this.chosePer.push({})
 					}
 				}
-
 				this.sellPrice = this.dayPrice[0].SellPrice
+				this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
 				this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
 				this.useOtherDate = this.dayPrice[0].DateStr
 				this.otherPrice = this.dayPrice[0].SellPrice
@@ -258,6 +281,7 @@ export default {
 				this.showDate = true
 			} else {
 				this.sellPrice = this.dayPrice[v].SellPrice
+				this.discountsPrice = (this.dayPrice[v].TicketPrice - this.dayPrice[v].SellPrice).toFixed(2)
 				this.useOtherDate = this.dayPrice[v].DateStr
 			}
 		},
@@ -270,6 +294,7 @@ export default {
 				this.useOtherDate = v.format('yyyy-MM-dd')
 				this.otherPrice = res.Data[0].SellPrice
 				this.sellPrice = res.Data[0].SellPrice
+				this.discountsPrice = (res.Data[0].TicketPrice - res.Data[0].SellPrice).toFixed(2)
 			})
 		},
 		//取消日期选择
