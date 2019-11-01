@@ -28,7 +28,7 @@
           <div class="card-info">
             <p class="card-info-name">姓名：{{newInfo.UserName}}</p>
             <p>身份证号：{{newInfo.UserIdCard}}</p>
-            <p>学生证：{{newInfo.CardNo}}</p>
+            <p v-show="newInfo.CardNo!=''">学生证：{{newInfo.CardNo}}</p>
           </div>
           <img @click.stop="share()" class="share-img" src="../../../assets/share.png">
         </div>
@@ -82,14 +82,16 @@ export default {
 			},
 			canvasWidth: window.innerWidth * 0.8,
 			// canvasHeight: (window.innerHeight - 49) * 0.75,
-			canvasHeight: 390,
+			canvasHeight: 410,
 			canvasMask: null,
 			canvasTarget: null,
 			timerOut: null,
 			newInfo: {}
 		}
 	},
-	created() {},
+	created() {
+		console.log(this.$store.state.shopInfo.IsCheckPerson)
+	},
 	mounted() {},
 	methods: {
 		//第一步生成护照
@@ -114,20 +116,21 @@ export default {
 			} else {
 				this.errMsg.phoneErr = false
 			}
-
-			//校验身份证号
-			if (this.person.card == '') {
-				this.errMsg.cardErr = true
-				this.errMsg.cardRed = '身份证号不能为空'
-				return
-			} else if (!this.$checkCard(this.person.card)) {
-				this.errMsg.cardErr = true
-				this.errMsg.cardRed = '身份证号格式有误'
-				return
-			} else {
-				this.errMsg.cardErr = false
+			//开启实名制
+			if (this.$store.state.shopInfo.IsCheckPerson) {
+				//校验身份证号
+				if (this.person.card == '') {
+					this.errMsg.cardErr = true
+					this.errMsg.cardRed = '身份证号不能为空'
+					return
+				} else if (!this.$checkCard(this.person.card)) {
+					this.errMsg.cardErr = true
+					this.errMsg.cardRed = '身份证号格式有误'
+					return
+				} else {
+					this.errMsg.cardErr = false
+				}
 			}
-
 			//学生证暂不做校验
 			let params = {
 				MerchantCode: this.$store.state.shopInfo.MerchantCode,
@@ -194,7 +197,7 @@ export default {
 			//二维码居中
 			let qrcodesquire = this.canvasWidth / 2
 			let centerPositonX = this.canvasWidth / 2 - qrcodesquire / 2
-			let centerPositonY = this.canvasHeight - qrcodesquire + 10
+			let centerPositonY = this.canvasHeight - qrcodesquire
 			this.canvasTarget.drawImage(this.$refs.headqr, centerPositonX, centerPositonY, qrcodesquire, qrcodesquire)
 			this.drawTxt()
 			this.drawCode()

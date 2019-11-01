@@ -6,7 +6,7 @@
         <div class="header-info">
           <p class="header-info-name">姓名：{{item.LinkName}}</p>
           <p>身份证号：{{item.LinkIDNumber}}</p>
-          <p>学生证：{{item.CardNo&&item.CardNo!='undefined'?item.CardNo:''}}</p>
+          <p v-show="item.CardNo&&item.CardNo!='undefined'">学生证：{{item.CardNo&&item.CardNo!='undefined'?item.CardNo:''}}</p>
         </div>
       </div>
       <div class="swiper-main">

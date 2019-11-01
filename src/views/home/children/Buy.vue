@@ -208,7 +208,7 @@ export default {
 		//获取产品详情
 		getProduct() {
 			this.$load()
-			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId, enterType: this.$route.query.enterType }).then(res => {
+			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId, IsProduct: this.$route.query.isProduct || this.$getQuery('isProduct') }).then(res => {
 				this.$close()
 				this.tourist = res.Data.PassengerInfo.map(el => {
 					return {
@@ -389,12 +389,15 @@ export default {
 				this.$toast('电话号码不正确')
 				return
 			}
-			if (!this.modifyTour.UserIdCard || this.modifyTour.UserIdCard == '') {
-				this.$toast('请输入身份证号')
-				return
-			} else if (!this.$checkCard(this.modifyTour.UserIdCard)) {
-				this.$toast('身份证号码不正确')
-				return
+			//开启实名制校验
+			if (this.$store.state.shopInfo.IsCheckPerson) {
+				if (!this.modifyTour.UserIdCard || this.modifyTour.UserIdCard == '') {
+					this.$toast('请输入身份证号')
+					return
+				} else if (!this.$checkCard(this.modifyTour.UserIdCard)) {
+					this.$toast('身份证号码不正确')
+					return
+				}
 			}
 			let params = {
 				MerchantCode: this.$store.state.shopInfo.MerchantCode,
@@ -492,31 +495,33 @@ export default {
 					return
 				}
 			}
-			let params = {
-				MerchantCode: this.$store.state.shopInfo.MerchantCode,
-				OpenID: this.$store.state.userInfo.openid,
-				PlayDate: this.useOtherDate,
-				LinkName: this.chosePer[0].UserName,
-				LinkPhone: this.chosePer[0].UserPhone,
-				LinkIDNumber: this.chosePer[0].CardID, //后台接收护照号并非身份证号
-				ProductID: this.$route.query.productId,
-				ProductName: this.productInfo.ProductName,
-				PickTicket: this.productInfo.PickTicket,
-				BuyCount: this.setpValue,
-				TicketPrice: this.productInfo.TicketPrice,
-				SellPrice: this.sellPrice
+			if (this.$store.state.userInfo.openid) {
+				let params = {
+					MerchantCode: this.$store.state.shopInfo.MerchantCode,
+					OpenID: this.$store.state.userInfo.openid,
+					PlayDate: this.useOtherDate,
+					LinkName: this.chosePer[0].UserName,
+					LinkPhone: this.chosePer[0].UserPhone,
+					LinkIDNumber: this.chosePer[0].CardID, //后台接收护照号并非身份证号
+					ProductID: this.$route.query.productId,
+					ProductName: this.productInfo.ProductName,
+					PickTicket: this.productInfo.PickTicket,
+					BuyCount: this.setpValue,
+					TicketPrice: this.productInfo.TicketPrice,
+					SellPrice: this.sellPrice
+				}
+				this.creatOrder(params)
+			} else {
+				this.$toast('用户登陆授权未成功')
 			}
-			this.creatOrder(params)
 		},
 		//不同意条款
 		noPassClause() {
-			this.$toast('不同意条款，已取消提交订单')
 			this.showClause = false
 		},
 		//同意条款---立即购买
 		passClause() {
 			if (this.checked) {
-				this.$toast('同意条款，提交订单')
 				this.showClause = false
 				this.payAction()
 			} else {
@@ -526,11 +531,17 @@ export default {
 		//创建订单返回支付信息
 		creatOrder(params) {
 			this.$load()
-			this.$ajax.post('Home/Order_Submit', {}, { OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer) }).then(res => {
-				this.weChatPay(res.Data.PayData)
-				this.OrderNo = res.Data.OrderNo
-				this.$close()
-			})
+			this.$ajax
+				.post(
+					'Home/Order_Submit',
+					{},
+					{ OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer), IsProduct: this.$route.query.isProduct || this.$getQuery('isProduct') }
+				)
+				.then(res => {
+					this.weChatPay(res.Data.PayData)
+					this.OrderNo = res.Data.OrderNo
+					this.$close()
+				})
 		},
 		//微信支付
 		weChatPay(params) {

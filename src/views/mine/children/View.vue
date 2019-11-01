@@ -16,7 +16,7 @@
           <div class="tourist-info">
             <p class="tourist-info-name">姓名：{{item.UserName}}</p>
             <p>身份证号：{{item.UserIdCard}}</p>
-            <p>学生证：{{item.CardNo}}</p>
+            <p v-show="item.CardNo!=''">学生证：{{item.CardNo}}</p>
           </div>
           <img @click.stop="delItem(index)" class="del-img" src="../../../assets/del.png">
         </div>

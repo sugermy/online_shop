@@ -171,7 +171,7 @@ export default {
 				query: {
 					productId: productId,
 					hasImg: type,
-					enterType: 0
+					isProduct: 0
 				}
 			})
 		}
