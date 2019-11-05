@@ -5,12 +5,13 @@
 }
 
 .buy {
+  background-color: #f7fafc !important;
   .buy-part {
     background: #fff;
     border-radius: 8px;
     margin-bottom: 8px;
     box-sizing: border-box;
-    padding: 14px;
+    padding: 24px 14px;
     &:first-child {
       margin-top: 8px;
     }
@@ -111,7 +112,18 @@
         .part-name {
           font-weight: 600;
           color: #333333;
-          line-height: 20px;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          .part-type {
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            background: #ff9921;
+            border-radius: 4px;
+            margin-left: 2%;
+            padding: 2px 4px 1px 4px;
+          }
         }
         .part-year {
           margin-top: 8px;
@@ -150,7 +162,7 @@
           .part-action-right {
             position: absolute;
             right: 0%;
-            bottom: 0%;
+            bottom: 4%;
           }
         }
         .part-rules-enter {
@@ -317,7 +329,7 @@
   }
 }
 .show-per {
-  height: 65vh;
+  height: 50vh;
   border-radius: 10px 10px 0 0;
   padding: 0 14px 14px;
   box-sizing: border-box;
@@ -414,6 +426,8 @@
 }
 .edit-per {
   height: 50vh !important;
+  top: 76% !important;
+  width: 100% !important;
   .van-cell {
     padding: 15px 16px;
   }

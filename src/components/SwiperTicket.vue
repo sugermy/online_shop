@@ -32,7 +32,10 @@ import QRCode from 'qrcodejs2' //引入二维码插件
 export default {
 	props: {
 		productinfo: Object,
-		ticketlist: Array, //订单票
+		ticketlist: {
+			type: Array,
+			default: [{}]
+		}, //订单票
 		tickettype: String //方便使用refs获取实例
 	},
 	data() {
@@ -69,7 +72,7 @@ export default {
 	.header-img {
 		width: 64px;
 		height: 64px;
-		margin: 0 18px 0 24px;
+		margin: 0 10px;
 		border-radius: 50%;
 	}
 	.header-info {
@@ -79,6 +82,22 @@ export default {
 		.header-info-name {
 			font-size: 16px;
 			margin-bottom: 4px;
+		}
+	}
+}
+@media (min-width: 240px) and (max-width: 320px) {
+	.header-info {
+		font-size: 12px !important;
+		.header-info-name {
+			font-size: 13px !important;
+		}
+	}
+}
+@media (min-width: 321px) and (max-width: 360px) {
+	.header-info {
+		font-size: 13px !important;
+		.header-info-name {
+			font-size: 14px !important;
 		}
 	}
 }

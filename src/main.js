@@ -41,6 +41,11 @@ Vue.prototype.$checkCard = checkCard
 Vue.prototype.$checkPhone = checkPhone
 Vue.prototype.$encryptCard = encryptCard
 
+/* 获取url中的参数 */
+let getQuery = function (name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
+}
+
 /*router*/
 let allRouter = new Router({
   mode: 'history',
@@ -65,7 +70,7 @@ function redirurl () {
   if (isProduct && isProduct != 0) {
     location.href = store.state.redirectUrl + enterHref
   } else {
-    location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl + '/'
+    location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl
   }
 }
 
@@ -73,7 +78,6 @@ function redirurl () {
 function getUser (code) {
   store.dispatch('getUserInfo', code).then(() => {
     let newAjax = new Ajax(store.state.userInfo.openid, window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
-    // let newAjax = new Ajax('', window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
     Vue.prototype.$ajax = newAjax
     getShop()
   })
@@ -121,10 +125,4 @@ let closeing = function loadding () {
 Vue.prototype.$load = loading
 Vue.prototype.$close = closeing
 
-/* 获取url中的参数 */
-function getQuery (name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
-}
-Vue.prototype.$getQuery = function (name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
-}
+Vue.prototype.$getQuery = getQuery

@@ -59,8 +59,8 @@ export default {
 			activeNames: [],
 			tabs: ['已使用', '待使用'],
 			productInfo: {},
-			userlist: [],
-			nouselist: [],
+			userlist: [{}],
+			nouselist: [{}],
 			showSwiperTicket: false
 		}
 	},

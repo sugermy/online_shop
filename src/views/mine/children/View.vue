@@ -7,7 +7,7 @@
         <i class="tourist-icon"></i>
         <span class="tourist-txt">创建旅游护照</span>
       </p>
-      <p class="no-data-info">注：可创建多个护照~</p>
+      <!-- <p class="no-data-info">注：可创建多个护照~</p> -->
     </div>
     <div v-if="tourist.length>0" class="has-data">
       <van-swipe-cell v-for="(item,index) in tourist" :key="index" :ref="`swipeCell${index}`">

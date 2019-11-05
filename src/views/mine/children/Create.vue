@@ -18,8 +18,8 @@
         <van-cell-group>
           <van-field v-model="person.name" clearable label="姓名" :maxlength="8" placeholder="请输入您的姓名" :error-message="errMsg.nameErr?errMsg.nameRed:errMsg.nameNo" />
           <van-field v-model="person.phone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入您的11位手机号" :error-message="errMsg.phoneErr?errMsg.phoneRed:errMsg.phoneNo" />
-          <van-field v-model="person.card" type="tel" label="身份证号" placeholder="请输入您的18位身份证号" :error-message="errMsg.cardErr?errMsg.cardRed:errMsg.cardNo" />
-          <van-field v-model="person.stuCard" label="学生证" placeholder="请输入您的学生证" />
+          <van-field v-model="person.card" type="number" label="身份证号" placeholder="请输入您的18位身份证号" :error-message="errMsg.cardErr?errMsg.cardRed:errMsg.cardNo" />
+          <!-- <van-field v-model="person.stuCard" label="学生证" placeholder="请输入您的学生证" /> -->
         </van-cell-group>
       </div>
       <div v-show="step==2">
@@ -37,7 +37,7 @@
     <div v-show="false">
       <img ref="headimg" src="../../../assets/head_photo.png">
       <img ref="headbg" src="../../../assets/info_bg.png">
-      <img ref="headqr" src="../../../assets/qrcode_we.jpg">
+      <img ref="headqr" src="../../../assets/qrcode_we.png">
     </div>
     <div class="creat-footer">
       <p class="footer-btn" v-show="step==1" @click="creatCard">生成护照</p>

@@ -36,8 +36,8 @@
         <img class="part-img" :src="productInfo.ProductImg">
         <!-- <div class="part-info" :class="$route.query.hasImg==2?'has-img':''"> -->
         <div class="part-info">
-          <p class="part-name">{{productInfo.ProductName}}</p>
-          <p class="part-year" v-if="productInfo.IsLimitAge"><i class="rules-icon"></i>适用人群：{{productInfo.ShowLimitAge}}</p>
+          <p class="part-name">{{productInfo.ProductName}} <span class="part-type">{{productInfo.ProductType}}</span></p>
+          <p class="part-year" v-if="productInfo.IsLimitAge"><i class="rules-icon"></i>{{productInfo.ShowLimitAge}}</p>
           <p class="part-detail ellipsis">{{productInfo.ProductIntroduce}}</p>
           <div class="part-action">
             <div class="part-action-left">
@@ -101,7 +101,7 @@
     <!-- 时间选择器e -->
 
     <!-- 新增编辑游客s -->
-    <van-popup v-model="showPer" class="show-per" round position="bottom">
+    <van-popup v-model="showPer" class="show-per" :overlay="overlay" id="showper" round position="bottom">
       <header class="per-header">
         <div class="per-btn cancel" @click="showPer=false">取消</div>
         <div class="per-txt">请至少选择<span class="per-txt-portent">{{perTxtTent}}</span>人</div>
@@ -128,7 +128,7 @@
     <!-- 新增编辑游客e -->
 
     <!-- 编辑游客信息s -->
-    <van-popup v-model="showEdit" class="show-per edit-per" round position="bottom">
+    <van-popup v-model="showEdit" class="show-per edit-per" get-container="#showper" round position="right">
       <header class="per-header">
         <div class="per-btn cancel" @click="showEdit=false">取消</div>
         <div class="title">编辑信息</div>
@@ -138,8 +138,8 @@
         <van-cell-group>
           <van-field v-model="modifyTour.UserName" :maxlength="8" label="姓名" placeholder="请输入姓名" />
           <van-field v-model="modifyTour.UserPhone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入电话号码" />
-          <van-field v-model="modifyTour.UserIdCard" type="tel" label="身份证号" placeholder="请输入身份证号" />
-          <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" />
+          <van-field v-model="modifyTour.UserIdCard" type="number" label="身份证号" placeholder="请输入身份证号" />
+          <!-- <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" /> -->
         </van-cell-group>
       </main>
     </van-popup>
@@ -198,7 +198,8 @@ export default {
 			activeNames: ['1', '2', '3'],
 			perTxtTent: 1,
 			editPosition: '',
-			OrderNo: ''
+			OrderNo: '',
+			overlay: true
 			// touristNum: 1
 		}
 	},
@@ -219,6 +220,7 @@ export default {
 		discountsMoney() {
 			return parseInt(this.discountsPrice * this.setpValue * 100) / 100 //四舍五入---or取两位小数parseInt(this.discountsPrice * this.setpValue*100)/100
 		},
+		//需填写的游客数量
 		touristNum() {
 			if (this.productInfo.PickTicket == 0) {
 				return 1
@@ -233,33 +235,37 @@ export default {
 			this.$load()
 			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId, IsProduct: this.$route.query.isProduct || this.$getQuery('isProduct') }).then(res => {
 				this.$close()
-				this.tourist = res.Data.PassengerInfo.map(el => {
-					return {
-						...el,
-						checked: false
-					}
-				})
-				this.productInfo = res.Data.ProductInfo
-				this.setpValue = res.Data.ProductInfo.SellMin
-				this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
-					return index <= 2
-				})
+				if (res.Code == 200) {
+					this.tourist = res.Data.PassengerInfo.map(el => {
+						return {
+							...el,
+							checked: false
+						}
+					})
+					this.productInfo = res.Data.ProductInfo
+					this.setpValue = res.Data.ProductInfo.SellMin
+					this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
+						return index <= 2
+					})
 
-				if (this.productInfo.PickTicket == 0) {
-					//为0 大票
-				} else {
-					//为1 一人一票
-					this.chosePer = []
-					let len = this.productInfo.SellMin
-					for (let i = 0; i < len; i++) {
-						this.chosePer.push({})
+					if (this.productInfo.PickTicket == 0) {
+						//为0 大票
+					} else {
+						//为1 一人一票
+						this.chosePer = []
+						let len = this.productInfo.SellMin
+						for (let i = 0; i < len; i++) {
+							this.chosePer.push({})
+						}
 					}
+					this.sellPrice = this.dayPrice[0].SellPrice
+					this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
+					this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
+					this.useOtherDate = this.dayPrice[0].DateStr
+					this.otherPrice = this.dayPrice[0].SellPrice
+				} else {
+					this.$toast(res.Content)
 				}
-				this.sellPrice = this.dayPrice[0].SellPrice
-				this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
-				this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
-				this.useOtherDate = this.dayPrice[0].DateStr
-				this.otherPrice = this.dayPrice[0].SellPrice
 			})
 		},
 
@@ -335,8 +341,13 @@ export default {
 		touristEdit(item, hasCheck, index, position) {
 			if (this.showPer) {
 				//在弹出层内部点击编辑
-				this.showPer = false
 				this.showEdit = true
+				this.overlay = false
+				let _this = this
+				setTimeout(() => {
+					_this.showPer = false
+					_this.overlay = true
+				}, 400)
 			} else {
 				//外部直接编辑
 				this.showEdit = true
