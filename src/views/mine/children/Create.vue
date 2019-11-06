@@ -24,7 +24,7 @@
       </div>
       <div v-show="step==2">
         <div class="card-main">
-          <img class="card-img" src="../../../assets/head_photo.png">
+          <img class="card-img" src="../../../assets/head_photo.jpg">
           <div class="card-info">
             <p class="card-info-name">姓名：{{newInfo.UserName}}</p>
             <p>身份证号：{{newInfo.UserIdCard}}</p>
@@ -163,7 +163,10 @@ export default {
 		//第二步点击购买---返回首页产品列表
 		goBuy() {
 			this.$router.push({
-				path: '/home'
+				path: '/home',
+				query: {
+					MerchantCode: this.$getQuery('MerchantCode')
+				}
 			})
 		},
 		//分享

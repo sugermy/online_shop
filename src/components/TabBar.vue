@@ -1,6 +1,6 @@
 <template>
   <ul class="tab-bar">
-    <router-link tag="li" v-for="(item,index) in menulist" :key="index" :to="{path:item.menuPath}">
+    <router-link tag="li" v-for="(item,index) in menulist" :key="index" :to="{path:item.menuPath,query:{MerchantCode:$getQuery('MerchantCode')}}">
       <img class="tab-icon" :src="$route.meta.parent==item.parent?require(`../assets/${item.activeIcon}.png`):require(`../assets/${item.normalIcon}.png`)" />
       <p class="tab-name">{{item.menuName}}</p>
     </router-link>

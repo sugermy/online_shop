@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-.rar
 
 # local env files
 .env.local
@@ -15,6 +14,7 @@ yarn-error.log*
 # Editor directories and files
 .idea
 .vscode
+*.rar
 *.suo
 *.ntvs*
 *.njsproj

@@ -233,40 +233,44 @@ export default {
 		//获取产品详情
 		getProduct() {
 			this.$load()
-			this.$ajax.get('Home/Order_GetProductInfo', { ProductID: this.$route.query.productId, IsProduct: this.$route.query.isProduct || this.$getQuery('isProduct') }).then(res => {
-				this.$close()
-				if (res.Code == 200) {
-					this.tourist = res.Data.PassengerInfo.map(el => {
-						return {
-							...el,
-							checked: false
-						}
-					})
-					this.productInfo = res.Data.ProductInfo
-					this.setpValue = res.Data.ProductInfo.SellMin
-					this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
-						return index <= 2
-					})
+			this.$ajax
+				.get('Home/Order_GetProductInfo', {
+					ProductID: this.$route.query.productId || this.$getQuery('productId')
+				})
+				.then(res => {
+					this.$close()
+					if (res.Code == 200) {
+						this.tourist = res.Data.PassengerInfo.map(el => {
+							return {
+								...el,
+								checked: false
+							}
+						})
+						this.productInfo = res.Data.ProductInfo
+						this.setpValue = res.Data.ProductInfo.SellMin
+						this.dayPrice = res.Data.PriceInfo.filter((el, index) => {
+							return index <= 2
+						})
 
-					if (this.productInfo.PickTicket == 0) {
-						//为0 大票
-					} else {
-						//为1 一人一票
-						this.chosePer = []
-						let len = this.productInfo.SellMin
-						for (let i = 0; i < len; i++) {
-							this.chosePer.push({})
+						if (this.productInfo.PickTicket == 0) {
+							//为0 大票
+						} else {
+							//为1 一人一票
+							this.chosePer = []
+							let len = this.productInfo.SellMin
+							for (let i = 0; i < len; i++) {
+								this.chosePer.push({})
+							}
 						}
+						this.sellPrice = this.dayPrice[0].SellPrice
+						this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
+						this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
+						this.useOtherDate = this.dayPrice[0].DateStr
+						this.otherPrice = this.dayPrice[0].SellPrice
+					} else {
+						this.$toast(res.Content)
 					}
-					this.sellPrice = this.dayPrice[0].SellPrice
-					this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
-					this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
-					this.useOtherDate = this.dayPrice[0].DateStr
-					this.otherPrice = this.dayPrice[0].SellPrice
-				} else {
-					this.$toast(res.Content)
-				}
-			})
+				})
 		},
 
 		//日期格式化
@@ -295,7 +299,7 @@ export default {
 		checkDate(v) {
 			this.showDate = false
 			let date = v.format('yyyy-MM-dd')
-			this.$ajax.get('Home/Order_GetProductPrice', { ProductID: this.$route.query.productId, PlayDate: date }).then(res => {
+			this.$ajax.get('Home/Order_GetProductPrice', { ProductID: this.$route.query.productId || this.$getQuery('productId'), PlayDate: date }).then(res => {
 				this.otherDate = v.format('MM-dd')
 				this.useOtherDate = v.format('yyyy-MM-dd')
 				this.otherPrice = res.Data[0].SellPrice
@@ -498,7 +502,8 @@ export default {
 			this.$router.push({
 				path: './need',
 				query: {
-					productInfo: JSON.stringify(this.productInfo)
+					productInfo: JSON.stringify(this.productInfo),
+					MerchantCode: this.$getQuery('MerchantCode')
 				}
 			})
 		},
@@ -539,7 +544,7 @@ export default {
 					LinkName: this.chosePer[0].UserName,
 					LinkPhone: this.chosePer[0].UserPhone,
 					LinkIDNumber: this.chosePer[0].CardID, //后台接收护照号并非身份证号
-					ProductID: this.$route.query.productId,
+					ProductID: this.$route.query.productId || this.$getQuery('productId'),
 					ProductName: this.productInfo.ProductName,
 					PickTicket: this.productInfo.PickTicket,
 					BuyCount: this.setpValue,
@@ -571,12 +576,16 @@ export default {
 				.post(
 					'Home/Order_Submit',
 					{},
-					{ OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer), IsProduct: this.$route.query.isProduct || this.$getQuery('isProduct') }
+					{ OrderJson: JSON.stringify(params), PassengerJson: JSON.stringify(this.chosePer), IsScan: this.$route.query.IsScan || this.$getQuery('IsScan') }
 				)
 				.then(res => {
-					this.weChatPay(res.Data.PayData)
-					this.OrderNo = res.Data.OrderNo
 					this.$close()
+					if (res.Code == 200) {
+						this.weChatPay(res.Data.PayData)
+						this.OrderNo = res.Data.OrderNo
+					} else {
+						this.$toast(res.Content)
+					}
 				})
 		},
 		//微信支付
@@ -587,12 +596,18 @@ export default {
 					// 使用以上方式判断前端返回,微信团队郑重提示：
 					//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
 					this.$router.push({
-						path: '/order'
+						path: '/order',
+						query: {
+							MerchantCode: this.$getQuery('MerchantCode')
+						}
 					})
 					this.toServrPay()
 				} else {
 					this.$router.push({
-						path: '/order'
+						path: '/order',
+						query: {
+							MerchantCode: this.$getQuery('MerchantCode')
+						}
 					})
 				}
 			})

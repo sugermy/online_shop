@@ -171,7 +171,8 @@ export default {
 				query: {
 					productId: productId,
 					// hasImg: type,
-					isProduct: 0
+					MerchantCode: this.$getQuery('MerchantCode'),
+					IsScan: 0
 				}
 			})
 		}

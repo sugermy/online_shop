@@ -55,29 +55,35 @@ Vue.use(Router)
 
 let enterHref = JSON.parse(JSON.stringify(location.href))
 //根据code换取当前登陆用户的个人信息
+let MerchantCode = getQuery('MerchantCode')
 let code = getQuery('code');
-if (code && code != '') {
-  getUser(code)
-} else {//缺省页地址栏无code 说明暂无授权
-  // store.dispatch('getRedirectUrl').then(() => {
-  //   redirurl()
-  // })
-  getUser('manyiTest')
+if (MerchantCode && MerchantCode != '') {
+  if (code && code != '') {
+    getUser(code)
+  } else {//缺省页地址栏无code 说明暂无授权
+    // store.dispatch('getRedirectUrl').then(() => {
+    //   redirurl()
+    // })
+    getUser('manyiTest')
+  }
+} else {
+  Toast('暂无商户')
 }
+
 //地址重定向
 function redirurl () {
-  let isProduct = getQuery('isProduct');
-  if (isProduct && isProduct != 0) {
-    location.href = store.state.redirectUrl + enterHref
+  let IsScan = getQuery('IsScan');
+  if (IsScan && IsScan != 0) {
+    location.href = store.state.redirectUrl + escape(enterHref)
   } else {
-    location.href = store.state.redirectUrl + window.SYSTEM_CONFIG.wechatUrl
+    location.href = store.state.redirectUrl + escape(window.SYSTEM_CONFIG.wechatUrl)
   }
 }
 
 //登陆
 function getUser (code) {
   store.dispatch('getUserInfo', code).then(() => {
-    let newAjax = new Ajax(store.state.userInfo.openid, window.SYSTEM_CONFIG.MerchantCode)//实例化AJAX并且挂载VUE原型
+    let newAjax = new Ajax(store.state.userInfo.openid, MerchantCode)//实例化AJAX并且挂载VUE原型
     Vue.prototype.$ajax = newAjax
     getShop()
   })

@@ -84,7 +84,8 @@ export default {
 			this.$router.push({
 				path: './Refund',
 				query: {
-					OrderNo
+					OrderNo,
+					MerchantCode: this.$getQuery('MerchantCode')
 				}
 			})
 		},
@@ -93,7 +94,8 @@ export default {
 			this.$router.push({
 				path: './detail',
 				query: {
-					OrderNo
+					OrderNo,
+					MerchantCode: this.$getQuery('MerchantCode')
 				}
 			})
 		}

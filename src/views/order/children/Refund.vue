@@ -34,7 +34,7 @@ export default {
 					checked: false
 				},
 				{
-					txt: '7天无理由退货',
+					txt: '7天无理由退款',
 					id: 3,
 					checked: false
 				},
@@ -66,7 +66,10 @@ export default {
 					duration: 2000,
 					onClose: () => {
 						this.$router.push({
-							path: '/order'
+							path: '/order',
+							query: {
+								MerchantCode: this.$getQuery('MerchantCode')
+							}
 						})
 					}
 				})

@@ -53,13 +53,17 @@ export default {
 			this.$router.push({
 				path: './detail',
 				query: {
-					keycode: key
+					keycode: key,
+					MerchantCode: this.$getQuery('MerchantCode')
 				}
 			})
 		},
 		creatAction() {
 			this.$router.push({
-				path: './create'
+				path: './create',
+				query: {
+					MerchantCode: this.$getQuery('MerchantCode')
+				}
 			})
 		},
 		//点击按钮删除

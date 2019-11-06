@@ -10,7 +10,7 @@
       <van-field v-model="person.Cicy" readonly label="城市" input-align="right" />
       <van-field v-model="person.UserPhone" readonly label="手机号" input-align="right" />
       <van-field v-model="person.UserIdCard" readonly label="身份证" input-align="right" />
-      <van-field v-model="person.CardNo" readonly label="学生证" input-align="right" />
+      <!-- <van-field v-model="person.CardNo" readonly label="学生证" input-align="right" /> -->
       <van-field v-model="person.MerchantName" readonly label="签发景区" input-align="right" />
       <van-field v-model="person.CardID" readonly label="旅游护照号" input-align="right" />
       <van-field v-model="person.CreateTime" readonly label="创建日期" input-align="right" />
