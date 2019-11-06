@@ -12,7 +12,7 @@
     <div v-if="tourist.length>0" class="has-data">
       <van-swipe-cell v-for="(item,index) in tourist" :key="index" :ref="`swipeCell${index}`">
         <div class="tourist-item" @click="enterDetail(item.CardID)">
-          <img class="tourist-img" src="../../../assets/head_photo.jpg">
+          <img class="tourist-img" src="../../../assets/head_photo.png">
           <div class="tourist-info">
             <p class="tourist-info-name">{{item.UserName}}</p>
             <p>身份证号：{{item.UserIdCard}}</p>

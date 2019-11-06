@@ -2,7 +2,7 @@
   <div class="mine-detail">
     <van-cell-group class="list">
       <van-field v-model="person.password" readonly label="头像" input-align="right">
-        <van-image slot="input" width="60" height="60" fit="cover" round :src="require('../../../assets/head_photo.jpg')" />
+        <van-image slot="input" width="60" height="60" fit="cover" round :src="require('../../../assets/head_photo.png')" />
       </van-field>
       <van-field v-model="person.UserName" readonly label="姓名" input-align="right" />
       <van-field v-model="person.Gender" readonly label="性别" input-align="right" />

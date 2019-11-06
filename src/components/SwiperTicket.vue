@@ -2,7 +2,7 @@
   <van-swipe :autoplay="0" class="swiper-list" :loop="false" indicator-color="#FF9921">
     <van-swipe-item v-for="(item,index) in ticketlist" :key="index">
       <div class="swiper-header">
-        <img class="header-img" src="../assets/head_photo.jpg">
+        <img class="header-img" src="../assets/head_photo.png">
         <div class="header-info">
           <p class="header-info-name">姓名：{{item.LinkName}}</p>
           <p>身份证号：{{item.LinkIDNumber}}</p>
