@@ -170,7 +170,6 @@ export default {
 				path: './buy',
 				query: {
 					productId: productId,
-					// hasImg: type,
 					MerchantCode: this.$getQuery('MerchantCode'),
 					IsScan: 0
 				}

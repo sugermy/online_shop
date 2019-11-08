@@ -21,8 +21,8 @@ export default {
     return new Promise((resolve, reject) => {
       merAjax.get('Home/GetUserInfo_H5', { code: data }).then(res => {
         if (res.Code == 200) {
-          // let master = JSON.parse(res.Data).Data
-          let master = JSON.parse(res.Data)
+          let master = JSON.parse(res.Data).Data
+          // let master = JSON.parse(res.Data)
           commit('setUserInfo', master)
         } else {
           commit('setUserInfo', {})

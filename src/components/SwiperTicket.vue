@@ -34,7 +34,9 @@ export default {
 		productinfo: Object,
 		ticketlist: {
 			type: Array,
-			default: [{}]
+			default: function() {
+				return [{}]
+			}
 		}, //订单票
 		tickettype: String //方便使用refs获取实例
 	},

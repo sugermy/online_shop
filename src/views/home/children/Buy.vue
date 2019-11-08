@@ -138,7 +138,7 @@
         <van-cell-group>
           <van-field v-model="modifyTour.UserName" :maxlength="8" label="姓名" placeholder="请输入姓名" />
           <van-field v-model="modifyTour.UserPhone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入电话号码" />
-          <van-field v-model="modifyTour.UserIdCard" type="number" label="身份证号" placeholder="请输入身份证号" />
+          <van-field v-model="modifyTour.UserIdCard" label="身份证号" placeholder="请输入身份证号" />
           <!-- <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" /> -->
         </van-cell-group>
       </main>
@@ -191,6 +191,7 @@ export default {
 			minDate: new Date(), //时间选择器最小为当日
 			dayPrice: [{}, {}, {}], //日期价
 			sellPrice: null, //当日售卖价格
+			ticketPrice: null, //当日票面价格
 			discountsPrice: null, //当前优惠价格
 			productInfo: {}, //产品信息
 			tourist: [],
@@ -263,6 +264,7 @@ export default {
 							}
 						}
 						this.sellPrice = this.dayPrice[0].SellPrice
+						this.ticketPrice = this.dayPrice[0].TicketPrice
 						this.discountsPrice = (this.dayPrice[0].TicketPrice - this.dayPrice[0].SellPrice).toFixed(2)
 						this.otherDate = this.dayPrice[0].DateStr.slice(5, this.dayPrice[0].DateStr.length)
 						this.useOtherDate = this.dayPrice[0].DateStr
@@ -291,6 +293,8 @@ export default {
 				this.showDate = true
 			} else {
 				this.sellPrice = this.dayPrice[v].SellPrice
+				this.ticketPrice = this.dayPrice[v].TicketPrice
+
 				this.discountsPrice = (this.dayPrice[v].TicketPrice - this.dayPrice[v].SellPrice).toFixed(2)
 				this.useOtherDate = this.dayPrice[v].DateStr
 			}
@@ -304,6 +308,7 @@ export default {
 				this.useOtherDate = v.format('yyyy-MM-dd')
 				this.otherPrice = res.Data[0].SellPrice
 				this.sellPrice = res.Data[0].SellPrice
+				this.ticketPrice = res.Data[0].TicketPrice
 				this.discountsPrice = (res.Data[0].TicketPrice - res.Data[0].SellPrice).toFixed(2)
 			})
 		},
@@ -438,6 +443,13 @@ export default {
 					this.$toast('身份证号码不正确')
 					return
 				}
+			} else {
+				console.log(111111111111111111)
+
+				if (this.modifyTour.UserIdCard && this.modifyTour.UserIdCard != '' && !this.$checkCard(this.modifyTour.UserIdCard)) {
+					this.$toast('身份证号码不正确')
+					return
+				}
 			}
 			let params = {
 				MerchantCode: this.$store.state.shopInfo.MerchantCode,
@@ -548,7 +560,7 @@ export default {
 					ProductName: this.productInfo.ProductName,
 					PickTicket: this.productInfo.PickTicket,
 					BuyCount: this.setpValue,
-					TicketPrice: this.productInfo.TicketPrice,
+					TicketPrice: this.ticketPrice,
 					SellPrice: this.sellPrice
 				}
 				this.creatOrder(params)
@@ -586,6 +598,10 @@ export default {
 					} else {
 						this.$toast(res.Content)
 					}
+				})
+				.catch(err => {
+					this.$close()
+					this.$toast(err)
 				})
 		},
 		//微信支付

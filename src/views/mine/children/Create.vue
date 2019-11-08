@@ -18,7 +18,7 @@
         <van-cell-group>
           <van-field v-model="person.name" clearable label="姓名" :maxlength="8" placeholder="请输入您的姓名" :error-message="errMsg.nameErr?errMsg.nameRed:errMsg.nameNo" />
           <van-field v-model="person.phone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入您的11位手机号" :error-message="errMsg.phoneErr?errMsg.phoneRed:errMsg.phoneNo" />
-          <van-field v-model="person.card" type="number" label="身份证号" placeholder="请输入您的18位身份证号" :error-message="errMsg.cardErr?errMsg.cardRed:errMsg.cardNo" />
+          <van-field v-model="person.card" label="身份证号" placeholder="请输入您的18位身份证号" :error-message="errMsg.cardErr?errMsg.cardRed:errMsg.cardNo" />
           <!-- <van-field v-model="person.stuCard" label="学生证" placeholder="请输入您的学生证" /> -->
         </van-cell-group>
       </div>
@@ -28,7 +28,7 @@
           <div class="card-info">
             <p class="card-info-name">姓名：{{newInfo.UserName}}</p>
             <p>身份证号：{{newInfo.UserIdCard}}</p>
-            <p v-show="newInfo.CardNo!=''">学生证：{{newInfo.CardNo}}</p>
+            <!-- <p v-show="newInfo.CardNo!=''">学生证：{{newInfo.CardNo}}</p> -->
           </div>
           <img @click.stop="share()" class="share-img" src="../../../assets/share.png">
         </div>
@@ -129,6 +129,11 @@ export default {
 					return
 				} else {
 					this.errMsg.cardErr = false
+				}
+			} else {
+				if (this.person.card != '' && !this.$checkCard(this.person.card)) {
+					this.$toast('身份证号码不正确')
+					return
 				}
 			}
 			//学生证暂不做校验

@@ -1,5 +1,5 @@
 // current use server
-const ACTIVE_SERVER = 'other'//当前使用的服务器
+const ACTIVE_SERVER = 'official'//当前使用的服务器
 // all servers
 const ALL_SERVERS = {
   // 1-1. 正式服务器

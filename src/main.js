@@ -61,10 +61,10 @@ if (MerchantCode && MerchantCode != '') {
   if (code && code != '') {
     getUser(code)
   } else {//缺省页地址栏无code 说明暂无授权
-    // store.dispatch('getRedirectUrl').then(() => {
-    //   redirurl()
-    // })
-    getUser('manyiTest')
+    store.dispatch('getRedirectUrl').then(() => {
+      redirurl()
+    })
+    // getUser('manyiTest')
   }
 } else {
   Toast('暂无商户')
@@ -76,7 +76,7 @@ function redirurl () {
   if (IsScan && IsScan != 0) {
     location.href = store.state.redirectUrl + escape(enterHref)
   } else {
-    location.href = store.state.redirectUrl + escape(window.SYSTEM_CONFIG.wechatUrl)
+    location.href = store.state.redirectUrl + escape(window.SYSTEM_CONFIG.wechatUrl + '?MerchantCode=' + MerchantCode)
   }
 }
 
@@ -130,5 +130,4 @@ let closeing = function loadding () {
 }
 Vue.prototype.$load = loading
 Vue.prototype.$close = closeing
-
 Vue.prototype.$getQuery = getQuery
