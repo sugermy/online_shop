@@ -136,9 +136,9 @@
       </header>
       <main class="per-main">
         <van-cell-group>
-          <van-field v-model="modifyTour.UserName" :maxlength="8" label="姓名" placeholder="请输入姓名" />
+          <van-field v-model="modifyTour.UserName" label="姓名" placeholder="请输入姓名" />
           <van-field v-model="modifyTour.UserPhone" type="tel" :maxlength="11" label="电话号码" placeholder="请输入电话号码" />
-          <van-field v-model="modifyTour.UserIdCard" label="身份证号" placeholder="请输入身份证号" />
+          <van-field v-model="modifyTour.UserIdCard" :maxlength="18" label="身份证号" placeholder="请输入身份证号" />
           <!-- <van-field v-model="modifyTour.CardNo" label="学生证" placeholder="请输入学生证" /> -->
         </van-cell-group>
       </main>
@@ -173,6 +173,9 @@
   </div>
 </template>
 <script>
+document.body.addEventListener('focusout', function() {
+	window.scrollTo(0, 0)
+})
 export default {
 	data() {
 		return {
@@ -444,8 +447,6 @@ export default {
 					return
 				}
 			} else {
-				console.log(111111111111111111)
-
 				if (this.modifyTour.UserIdCard && this.modifyTour.UserIdCard != '' && !this.$checkCard(this.modifyTour.UserIdCard)) {
 					this.$toast('身份证号码不正确')
 					return
